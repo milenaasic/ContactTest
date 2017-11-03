@@ -17,7 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class ContactFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> ,MyContactRecyclerViewAdapter.OnViewHolderClicked {
+public class ContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        MyContactRecyclerViewAdapter.OnViewHolderClicked {
 
 
     // interfejs prema Activity koja ga sadrzi
@@ -42,12 +43,12 @@ public class ContactFragment extends Fragment implements LoaderManager.LoaderCal
 
 
 
-    public ContactFragment() {
+    public ContactsFragment() {
     }
 
 
-    public static ContactFragment newInstance() {
-        ContactFragment fragment = new ContactFragment();
+    public static ContactsFragment newInstance() {
+        ContactsFragment fragment = new ContactsFragment();
        /* Bundle args = new Bundle();
         args.putInt(ARG, arg);
         fragment.setArguments(args);*/
@@ -132,7 +133,7 @@ public class ContactFragment extends Fragment implements LoaderManager.LoaderCal
 
     }
 
-
+    // interfejs prema Activity koja ga sadrzi
     public interface OnContactsFragmentInteractionListener {
         // šaljem ka Mainacitivy informaciju na osnovu koje će otvoriti Detail fragment
         // ne znam još šta ću poslati , koji tip podatka

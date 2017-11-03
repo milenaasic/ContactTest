@@ -20,7 +20,7 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.milenaasic.contacttest.ContactFragment"
+    tools:context="com.example.milenaasic.contacttest.ContactsFragment"
     tools:listitem="@layout/fragment_contact_item" >
     </android.support.v7.widget.RecyclerView>
 
