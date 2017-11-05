@@ -2,19 +2,23 @@ package com.example.milenaasic.contacttest;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class MainActivity extends AppCompatActivity implements ContactsFragment.OnContactsFragmentInteractionListener {
 
+    private static final String LOG="MainActivity";
     private static final int REQUEST_READ_CONTACTS=100;
     View mCoordinatorLayout;
 
@@ -27,11 +31,11 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         Toolbar myToolbar = (Toolbar) findViewById(R.id.mytoolbar);
 
         setSupportActionBar(myToolbar);
-        mCoordinatorLayout=findViewById(R.id.myCoordinatorLayout);
+        mCoordinatorLayout=findViewById(R.id.containerContactsList);
 
         // ako imas permission ucitaj fragment
         if (checkReadContacsPermission()) {
-
+            Log.v(LOG,"permission read contacts true on create");
             getSupportFragmentManager().beginTransaction().add(R.id.containerContactsList, new ContactsFragment()).commit();
 
 
@@ -72,5 +76,16 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.v(LOG,"permission read contacts callback premission");
+                getSupportFragmentManager().beginTransaction().add(R.id.containerContactsList, new ContactsFragment()).commit();
 
+
+            }
+        }
+    }
 }

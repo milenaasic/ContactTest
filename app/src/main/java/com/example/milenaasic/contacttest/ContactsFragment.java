@@ -10,8 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +22,14 @@ import android.view.ViewGroup;
 public class ContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         MyContactRecyclerViewAdapter.OnViewHolderClicked {
 
-
+    private static final String DEBUG="ContactsFragment";
     // interfejs prema Activity koja ga sadrzi
     private OnContactsFragmentInteractionListener mListener;
 
     //promenljive vezane za UI View elemente
     RecyclerView mRecyclerView;
     MyContactRecyclerViewAdapter mAdapter;
-    SearchView mSearchView;
+    //SearchView mSearchView;
     private String mSearchString="";
 
     //loader konstanta
@@ -37,8 +39,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String[] PROJECTION={ContactsContract.Contacts._ID , ContactsContract.Contacts.LOOKUP_KEY,
                                             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY, ContactsContract.Contacts.PHOTO_THUMBNAIL_URI};
     private static final String SELECTION=ContactsContract.Contacts.DISPLAY_NAME_PRIMARY+ " LIKE ?";
-    private String[] mSelectionArgs;
 
+    private String[] mSelectionArgs = { "s" };
 
 
 
@@ -67,8 +69,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_contact_list, container, false);
 
         mRecyclerView=rootView.findViewById(R.id.myRecylerView);
-        mSearchView=rootView.findViewById(R.id.mySearchView);
-
+        //mSearchView=rootView.findViewById(R.id.mySearchView);
+        Log.v(DEBUG,"onCreateView");
         return rootView;
     }
 
@@ -78,6 +80,10 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         super.onActivityCreated(savedInstanceState);
 
         getLoaderManager().initLoader(LOADER_ID,null,this);
+
+        mAdapter=new MyContactRecyclerViewAdapter(null,this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mAdapter);
 
     }
 
@@ -100,15 +106,15 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        mSelectionArgs[0] = "%" + mSearchString + "%";
+        Log.v(DEBUG,"onCreateCursor");
+        //mSelectionArgs[0] = "m";
         // da li treba provera mSearchStringa da ne udje nesto bezveze
         return new CursorLoader(
                 getActivity(),
                 ContactsContract.Contacts.CONTENT_URI,
                 PROJECTION,
-                SELECTION,
-                mSelectionArgs,
+                null,
+                null,
                 null);
 
 
@@ -116,9 +122,17 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.v(DEBUG,"onLoadFinished");
 
+        if (data!=null) {
+
+            int n=data.getCount();
+            Log.v(DEBUG,((Integer)n).toString());
+        }
+        mAdapter.setOriginalCursor(data);
+        /*ovde nekom metodom setujem cursor u vec napravljenom adapteru
         mAdapter=new MyContactRecyclerViewAdapter(data,this);
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);*/
 
     }
 

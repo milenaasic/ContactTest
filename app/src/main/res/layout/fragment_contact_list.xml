@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <SearchView
 
@@ -18,10 +18,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.milenaasic.contacttest.ContactsFragment"
-    tools:listitem="@layout/fragment_contact_item" >
+    android:layout_marginRight="16dp">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
