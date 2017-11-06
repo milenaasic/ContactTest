@@ -1,6 +1,7 @@
 package com.example.milenaasic.contacttest;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.StringLoader;
 
 
 public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContactRecyclerViewAdapter.ViewHolder> {
@@ -35,9 +37,9 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     }
 
     void setOriginalCursor(Cursor c){
-        if (originalCursor==null){
+        /*if (originalCursor==null){
             Log.v(LOG,"OrigCursor je null");
-            if (c==null){ Log.v(LOG,"c Cursor je null");}
+            if (c==null){ Log.v(LOG,"c Cursor je null");}*/
 
             if (c!=null) {
                 originalCursor = c;
@@ -45,7 +47,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 int n=c.getCount();
                 Log.v(LOG,((Integer)n).toString());
             }
-        }
+        
         notifyDataSetChanged();
         Log.v(LOG,"notifyDataset");
         }
@@ -74,15 +76,16 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
         if (originalCursor!=null && originalCursor.getCount()!=0) {
             Log.v(LOG,"onBind origCursor nije null i count nije 0");
             Log.v(LOG,((Integer)position).toString()+"cursor pozicija");
-           if(originalCursor.moveToPosition(position)) {
-               long thumbnaulUri = originalCursor.getLong(CURSOR_PHOTO_THUMBNAIL_URI);
-               Log.v(LOG,((Long)thumbnaulUri).toString()+"thumburi");
+           /*if(originalCursor.moveToPosition(position)) {
+               int thumbnaulUriColumn = originalCursor.getInt(CURSOR_PHOTO_THUMBNAIL_URI);
+               Log.v(LOG,((Integer)thumbnaulUriColumn).toString()+"thumburi");
+               String mThumbnailUri=originalCursor.getString(thumbnaulUriColumn);
                Glide.with((Fragment)mViewHolderClicked)
-                       .load(thumbnaulUri)
+                       .load(mThumbnailUri)
                        .into(holder.mItemImageView);
            } else {
             Glide.with((Fragment) mViewHolderClicked).clear(holder.mItemImageView);
-            holder.mItemImageView.setImageResource(android.R.drawable.arrow_down_float);
+            holder.mItemImageView.setImageResource(android.R.drawable.arrow_down_float);*/
         }
 
             if(originalCursor.moveToPosition(position)){
@@ -95,10 +98,10 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
 
 
-        }
-
-
     }
+
+
+
 
     @Override
     public int getItemCount() {
