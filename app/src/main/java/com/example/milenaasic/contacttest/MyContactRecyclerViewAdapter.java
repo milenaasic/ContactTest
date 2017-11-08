@@ -1,7 +1,13 @@
 package com.example.milenaasic.contacttest;
 
+import android.content.ContentUris;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +20,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.StringLoader;
+import com.bumptech.glide.request.RequestOptions;
+
+import static com.example.milenaasic.contacttest.R.drawable.ic_person_black_48dp;
 
 
 public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContactRecyclerViewAdapter.ViewHolder> {
 
     private static final String LOG="MyConttRecViewAdapter";
     private static OnViewHolderClicked mViewHolderClicked;
-    private Cursor originalCursor;
-    private Cursor filteredCursor;
+    private Cursor filterCursor;
+
 
     // konstante koje definišu Cursor kolone, ali koje mi mozda ovde ne trebaju, jer ovde ne vadim ništa iz kolona
     private static final int CURSOR_COLUMN_ID=0;
@@ -30,19 +39,21 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     private static final int CURSOR_PHOTO_THUMBNAIL_URI=3;
 
 
+
     MyContactRecyclerViewAdapter(Cursor cursor, OnViewHolderClicked listener) {
         Log.v(LOG,"adapter konstruktor");
-        originalCursor=cursor;
+        filterCursor=cursor;
         mViewHolderClicked = listener;
+
     }
 
-    void setOriginalCursor(Cursor c){
+    void setFilterCursor(Cursor c){
         /*if (originalCursor==null){
             Log.v(LOG,"OrigCursor je null");
             if (c==null){ Log.v(LOG,"c Cursor je null");}*/
 
             if (c!=null) {
-                originalCursor = c;
+                filterCursor = c;
                 Log.v(LOG,"setovani cursor nije null");
                 int n=c.getCount();
                 Log.v(LOG,((Integer)n).toString());
@@ -51,8 +62,6 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
         notifyDataSetChanged();
         Log.v(LOG,"notifyDataset");
         }
-
-
 
 
     public interface OnViewHolderClicked{
@@ -71,43 +80,52 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     }
 
     @Override
-    public void onBindViewHolder( ViewHolder holder, int position) {
-        Log.v(LOG,"onBind bilo kako");
-        if (originalCursor!=null && originalCursor.getCount()!=0) {
-            Log.v(LOG,"onBind origCursor nije null i count nije 0");
-            Log.v(LOG,((Integer)position).toString()+"cursor pozicija");
-           /*if(originalCursor.moveToPosition(position)) {
-               int thumbnaulUriColumn = originalCursor.getInt(CURSOR_PHOTO_THUMBNAIL_URI);
-               Log.v(LOG,((Integer)thumbnaulUriColumn).toString()+"thumburi");
-               String mThumbnailUri=originalCursor.getString(thumbnaulUriColumn);
-               Glide.with((Fragment)mViewHolderClicked)
-                       .load(mThumbnailUri)
-                       .into(holder.mItemImageView);
-           } else {
-            Glide.with((Fragment) mViewHolderClicked).clear(holder.mItemImageView);
-            holder.mItemImageView.setImageResource(android.R.drawable.arrow_down_float);*/
-        }
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Log.v(LOG, "onBind bilo kako");
 
-            if(originalCursor.moveToPosition(position)){
+        if (filterCursor != null && filterCursor.getCount() != 0) {
+            Log.v(LOG, "onBind origCursor nije null i count nije 0");
+            Log.v(LOG, ((Integer) position).toString() + "cursor pozicija");
 
-                String name=originalCursor.getString(2);
-                Log.v(LOG,"string iz cursora"+name);
-                holder.mItemTextView.setText(name);
-                Log.v(LOG,"setovan text ");
+            if (filterCursor.moveToPosition(position)) {
+
+                int contactId=filterCursor.getInt(CURSOR_COLUMN_ID);
+                Uri contactUri= ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,contactId);
+                Uri photoThumbUri=Uri.withAppendedPath(contactUri,ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+
+                RequestOptions options = new RequestOptions();
+                options.circleCrop();
+                RequestOptions options1 = new RequestOptions();
+                options1.fallback(R.drawable.ic_person_black_48dp);
+
+                    Glide.with((Fragment) mViewHolderClicked)
+                            .load(photoThumbUri)
+                            .apply(options)
+                            .into(holder.mItemImageView);
+
+                    Log.v(LOG,photoThumbUri+" photoThumbUri");
+
+                    String name = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
+                    Log.v(LOG, "string iz cursora" + name);
+                    holder.mItemTextView.setText(name);
+                    Log.v(LOG, "setovan text ");
+
+
+
             }
-
-
-
+        }
     }
+
+
 
 
 
 
     @Override
     public int getItemCount() {
-        if(originalCursor==null){
+        if(filterCursor==null){
             return 0;
-        }else return originalCursor.getCount();
+        }else return filterCursor.getCount();
     }
 
 
@@ -129,6 +147,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
         @Override
         public void onClick(View v) {
            int position=getAdapterPosition();
+
             mViewHolderClicked.viewHolderClicked(v,position);
         }
     }

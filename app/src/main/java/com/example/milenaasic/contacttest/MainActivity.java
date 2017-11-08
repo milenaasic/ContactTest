@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     private static final int REQUEST_READ_CONTACTS=100;
     View mCoordinatorLayout;
 
+    public static final String CONTACT_ID="contactID";
+    public static final String CONTACT_LOOKUP_KEY="contactLookup";
+    public static final String CONTACT_NAME="contactName";
 
 
     @Override
@@ -34,10 +37,11 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         mCoordinatorLayout=findViewById(R.id.containerContactsList);
 
         // ako imas permission ucitaj fragment
-        if (checkReadContacsPermission()) {
-            Log.v(LOG,"permission read contacts true on create");
-            getSupportFragmentManager().beginTransaction().add(R.id.containerContactsList, new ContactsFragment()).commit();
-
+        if(savedInstanceState==null){
+            if (checkReadContacsPermission()) {
+                Log.v(LOG, "permission read contacts true on create");
+                getSupportFragmentManager().beginTransaction().add(R.id.containerContactsList, new ContactsFragment()).commit();
+            }
 
         }
 
@@ -46,7 +50,14 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     }
 
     @Override
-    public void onContactsFragmentInteraction (Uri itemUri){
+    public void onContactsFragmentInteraction (int id,int lookup,String name){
+        Bundle detailBundle=new Bundle();
+        detailBundle.putInt(CONTACT_ID,id);
+        detailBundle.putInt(CONTACT_LOOKUP_KEY,lookup);
+        detailBundle.putString(CONTACT_NAME,name);
+        Intent intent=new Intent(this,SingleContactActivity.class);
+        intent.putExtras(detailBundle);
+        startActivity(intent);
 
     }
 

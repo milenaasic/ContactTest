@@ -1,5 +1,6 @@
 package com.example.milenaasic.contacttest;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 public class ContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -32,18 +34,28 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     MyContactRecyclerViewAdapter mAdapter;
 
     //SearchView mSearchView;
-    SearchView mSearchView;
+    private SearchView mSearchView;
     private String mCurrentFilter;
 
     //loader konstanta
     private static final int LOADER_ID=10;
 
     //konstante za pretragu ContactsProvidera koja se radi preko Loader-a
-    private static final String[] PROJECTION={ContactsContract.Contacts._ID , ContactsContract.Contacts.LOOKUP_KEY,
-                                            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY, ContactsContract.Contacts.PHOTO_THUMBNAIL_URI};
+    private static final String[] PROJECTION={  ContactsContract.Contacts._ID ,
+                                                ContactsContract.Contacts.LOOKUP_KEY,
+                                                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+                                                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI};
     private static final String SELECTION=ContactsContract.Contacts.DISPLAY_NAME_PRIMARY+ "LIKE ?";
 
     private String[] mSelectionArgs;
+
+    //Cursor koji prosledjujem u Adapter
+    private Cursor filterCursor;
+    private static final int CURSOR_COLUMN_ID=0;
+    private static final int CURSOR_COLUMN_LOOKUP=1;
+    private static final int CURSOR_DISPLAY_NAME_PRIMARY=2;
+    private static final int CURSOR_PHOTO_THUMBNAIL_URI=3;
+
 
 
 
@@ -54,9 +66,6 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     public static ContactsFragment newInstance() {
         ContactsFragment fragment = new ContactsFragment();
-       /* Bundle args = new Bundle();
-        args.putInt(ARG, arg);
-        fragment.setArguments(args);*/
         return fragment;
     }
 
@@ -74,6 +83,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         mRecyclerView=rootView.findViewById(R.id.myRecylerView);
         mSearchView=rootView.findViewById(R.id.mySearchView);
         mSearchView.setOnQueryTextListener(this);
+        mSearchView.setSubmitButtonEnabled(false);
         Log.v(DEBUG,"onCreateView");
         return rootView;
     }
@@ -123,22 +133,10 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         String select = "((" + ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " NOTNULL) AND ("
                 + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                 + ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " != '' ))";
+
         return new CursorLoader(getActivity(), baseUri,
                 PROJECTION, select, null,
                 ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " COLLATE LOCALIZED ASC");
-
-
-        /*if (mSearchString==null)mSelectionArgs[0]=null;
-        else{mSelectionArgs[0] = "%"+mSearchString+"%";}
-        // da li treba provera mSearchStringa da ne udje nesto bezveze
-        return new CursorLoader(
-                getActivity(),
-                ContactsContract.Contacts.CONTENT_URI,
-                PROJECTION,
-                SELECTION,
-                mSelectionArgs,
-                null);*/
-
 
     }
 
@@ -151,10 +149,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
             int n=data.getCount();
             Log.v(DEBUG,((Integer)n).toString()+"u onLoadFinish");
         }
-        mAdapter.setOriginalCursor(data);
-        /*ovde nekom metodom setujem cursor u vec napravljenom adapteru
-        mAdapter=new MyContactRecyclerViewAdapter(data,this);
-        mRecyclerView.setAdapter(mAdapter);*/
+        filterCursor=data;
+        mAdapter.setFilterCursor(filterCursor);
 
     }
 
@@ -163,6 +159,20 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void viewHolderClicked(View v,int position) {
+
+        Toast.makeText(getActivity(),"cliced item nb "+((Integer)position).toString(),Toast.LENGTH_SHORT).show();
+
+        if (filterCursor != null && filterCursor.getCount() != 0) {
+            if (filterCursor.moveToPosition(position)) {
+
+                int contactId=filterCursor.getInt(CURSOR_COLUMN_ID);
+                int contactLookupKey=filterCursor.getInt(CURSOR_COLUMN_LOOKUP);
+                String name = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
+                mListener.onContactsFragmentInteraction(contactId,contactLookupKey,name);
+
+
+            }
+        }
 
     }
 
@@ -197,7 +207,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     public interface OnContactsFragmentInteractionListener {
         // šaljem ka Mainacitivy informaciju na osnovu koje će otvoriti Detail fragment
         // ne znam još šta ću poslati , koji tip podatka
-        void onContactsFragmentInteraction(Uri itemUri);
+        void onContactsFragmentInteraction(int id, int lookup,String name);
     }
 
 
@@ -207,7 +217,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         // This is called when the last Cursor provided to onLoadFinished()
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
-        mAdapter.setOriginalCursor(null);
+        mAdapter.setFilterCursor(null);
     }
 
 

@@ -3,4 +3,7 @@
     <string name="permission_rationale">Need permission to access contacts to make a call</string>
     <string name="searchHint">Search</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
