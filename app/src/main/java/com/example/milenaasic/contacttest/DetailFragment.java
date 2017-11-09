@@ -1,17 +1,29 @@
 package com.example.milenaasic.contacttest;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
+public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-public class DetailFragment extends Fragment {
+    private static final String DEBUG="detailfragment";
+
+    private static final int DETAIL_LOADER_ID=15;
 
     private static final String ARG_PARAM1 = "id";
     private static final String ARG_PARAM2 = "lookup";
@@ -41,7 +53,7 @@ public class DetailFragment extends Fragment {
     private String mLookupKey;
 
 
-
+    TextView phoneNumber;
 
 
     public DetailFragment() {
@@ -72,7 +84,14 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false);
+        View rootView=inflater.inflate(R.layout.fragment_detail, container, false);
+        TextView displayName =rootView.findViewById(R.id.mytextView);
+        displayName.setText(contactName);
+        phoneNumber=rootView.findViewById(R.id.phonetextView);
+
+
+
+        return rootView;
     }
 
 
@@ -84,7 +103,7 @@ public class DetailFragment extends Fragment {
             mListener = (OnDetailFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnDetailFragmentInteractionListener");
         }
     }
 
@@ -94,18 +113,54 @@ public class DetailFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getLoaderManager().initLoader(DETAIL_LOADER_ID,null,this);
+
+
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        phoneSelectionArguments[0] = mLookupKey;
+        // Starts the query
+
+             return    new CursorLoader(
+                        getActivity(),
+                        ContactsContract.Data.CONTENT_URI,
+                        PROJECTION_PHONES,
+                        SELECTION_PHONES,
+                        phoneSelectionArguments,
+                        null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        if (data!=null) {
+
+            int n=data.getCount();
+            Log.v(DEBUG,((Integer)n).toString()+"u onLoadFinish");
+        }
+
+        if (data.moveToPosition(0)) {
+
+            String contactNumber = data.getString(CURSOR_PHONE_NUMBER);
+            phoneNumber.setText(contactNumber);
+
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+
     public interface OnDetailFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onDetailFragmentInteraction(Uri uri);
     }
 }
