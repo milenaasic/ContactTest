@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     }
 
     @Override
-    public void onContactsFragmentInteraction (int id,int lookup,String name){
+    public void onContactsFragmentInteraction (int id,String lookup,String name){
         Bundle detailBundle=new Bundle();
         detailBundle.putInt(CONTACT_ID,id);
-        detailBundle.putInt(CONTACT_LOOKUP_KEY,lookup);
+        detailBundle.putString(CONTACT_LOOKUP_KEY,lookup);
         detailBundle.putString(CONTACT_NAME,name);
         Intent intent=new Intent(this,SingleContactActivity.class);
         intent.putExtras(detailBundle);

@@ -16,14 +16,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="24dp"
+            android:alpha="0.6"
+            android:background="@android:color/darker_gray"
+            android:elevation="9dp"
             android:gravity="bottom"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
             android:text="@string/call_via_veritel"
             android:textAlignment="center"
-             />
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@android:color/white"
+            android:textColorHighlight="@color/colorAccent"
+            android:textStyle="bold"
+            tools:mockup_opacity="@android:color/background_light" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/myimageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_person_black_48dp" />
@@ -34,26 +42,58 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="23dp"
+            android:background="@android:color/darker_gray">
+            android:layout_marginTop="23dp"</View>
+
 
         <LinearLayout
+            android:id="@+id/callButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
+
 
             <TextView
                 android:id="@+id/phonetextView"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="3"
-                android:text="TextView" />
+                android:autoText="false"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
                 app:srcCompat="@android:drawable/sym_action_call" />
+
+
         </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"></View>
+
 
     </LinearLayout>
 

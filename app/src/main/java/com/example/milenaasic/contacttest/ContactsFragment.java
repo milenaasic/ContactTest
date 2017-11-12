@@ -166,7 +166,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
             if (filterCursor.moveToPosition(position)) {
 
                 int contactId=filterCursor.getInt(CURSOR_COLUMN_ID);
-                int contactLookupKey=filterCursor.getInt(CURSOR_COLUMN_LOOKUP);
+                String contactLookupKey=filterCursor.getString(CURSOR_COLUMN_LOOKUP);
                 String name = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
                 mListener.onContactsFragmentInteraction(contactId,contactLookupKey,name);
 
@@ -207,7 +207,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     public interface OnContactsFragmentInteractionListener {
         // šaljem ka Mainacitivy informaciju na osnovu koje će otvoriti Detail fragment
         // ne znam još šta ću poslati , koji tip podatka
-        void onContactsFragmentInteraction(int id, int lookup,String name);
+        void onContactsFragmentInteraction(int id, String lookup,String name);
     }
 
 

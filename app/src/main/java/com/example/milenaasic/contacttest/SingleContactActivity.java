@@ -10,12 +10,14 @@ import android.view.View;
 
 public class SingleContactActivity extends AppCompatActivity implements DetailFragment.OnDetailFragmentInteractionListener{
 
+    public static final String DEBUG="SinglePictureActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_contact);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.mySingleToolbar);
-        myToolbar.setNavigationIcon(R.drawable.slika0_thumb);
+        myToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_48dptrans);
         myToolbar.setTitle("");
         // uradi setHomeButtonasUpEnabled
         setSupportActionBar(myToolbar);
@@ -32,8 +34,11 @@ public class SingleContactActivity extends AppCompatActivity implements DetailFr
                 Bundle bundle = intent.getExtras();
                 if(bundle!=null) {
                     int arg1 = bundle.getInt(MainActivity.CONTACT_ID);
-                    int arg2 = bundle.getInt(MainActivity.CONTACT_LOOKUP_KEY);
+                    String arg2 = bundle.getString(MainActivity.CONTACT_LOOKUP_KEY);
                     String arg3 = bundle.getString(MainActivity.CONTACT_NAME);
+                    Log.v(DEBUG,"arg1 Id"+((Integer)arg1).toString());
+                    Log.v(DEBUG,"arg2 lookup key"+arg2);
+                    Log.v(DEBUG,"contact name"+arg3);
 
                     DetailFragment detailFragment = DetailFragment.newInstance(arg1, arg2, arg3);
                     getSupportFragmentManager().beginTransaction().add(R.id.detailFragmentContainer, detailFragment).commit();

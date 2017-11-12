@@ -3,6 +3,8 @@ package com.example.milenaasic.contacttest;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -16,7 +18,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
 
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
@@ -31,7 +37,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     // TODO: Rename and change types of parameters
     private int contactId ;
-    private int contactLookupKey;
+    private String contactLookupKey;
     private String contactName;
 
 
@@ -60,11 +66,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // Required empty public constructor
     }
 
-    public static DetailFragment newInstance(int param1,int param2,String param3) {
+    public static DetailFragment newInstance(int param1,String param2,String param3) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, param1);
-        args.putInt(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM2, param2);
         args.putString(ARG_PARAM3,param3);
         fragment.setArguments(args);
         return fragment;
@@ -75,7 +81,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             contactId = getArguments().getInt(ARG_PARAM1);
-            contactLookupKey = getArguments().getInt(ARG_PARAM2);
+            contactLookupKey = getArguments().getString(ARG_PARAM2);
             contactName = getArguments().getString(ARG_PARAM3);
         }
     }
@@ -88,8 +94,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         TextView displayName =rootView.findViewById(R.id.mytextView);
         displayName.setText(contactName);
         phoneNumber=rootView.findViewById(R.id.phonetextView);
+        ImageView image=rootView.findViewById(R.id.myimageView);
+        //prikazi sliku ako je ima
 
+        Uri contactUri= ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,contactId);
+        Uri photoThumbUri=Uri.withAppendedPath(contactUri,ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+        //Uri photoThumbUri2=Uri.withAppendedPath(contactUri,ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
 
+        GlideApp.with(this)
+                .load(photoThumbUri)
+                .centerCrop()
+                .fallback(R.drawable.slika0_thumb)
+                .error(R.drawable.ic_person_black_48dp)
+                .into(image);
 
         return rootView;
     }
@@ -125,7 +142,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        phoneSelectionArguments[0] = mLookupKey;
+        phoneSelectionArguments[0] = contactLookupKey;
         // Starts the query
 
              return    new CursorLoader(
@@ -143,10 +160,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (data!=null) {
 
             int n=data.getCount();
-            Log.v(DEBUG,((Integer)n).toString()+"u onLoadFinish");
+            Log.v(DEBUG,((Integer)n).toString()+" broj redova u onLoadFinish");
         }
 
-        if (data.moveToPosition(0)) {
+        if (data.getCount()!=0 && data.moveToPosition(0)) {
 
             String contactNumber = data.getString(CURSOR_PHONE_NUMBER);
             phoneNumber.setText(contactNumber);

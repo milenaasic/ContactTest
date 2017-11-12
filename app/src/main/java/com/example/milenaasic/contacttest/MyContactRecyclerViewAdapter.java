@@ -19,10 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.load.model.StringLoader;
 import com.bumptech.glide.request.RequestOptions;
-
-import static com.example.milenaasic.contacttest.R.drawable.ic_person_black_48dp;
+import com.bumptech.glide.request.target.Target;
 
 
 public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContactRecyclerViewAdapter.ViewHolder> {
@@ -95,15 +95,18 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
                 RequestOptions options = new RequestOptions();
                 options.circleCrop();
+
                 RequestOptions options1 = new RequestOptions();
-                options1.fallback(R.drawable.ic_person_black_48dp);
 
-                    Glide.with((Fragment) mViewHolderClicked)
-                            .load(photoThumbUri)
-                            .apply(options)
-                            .into(holder.mItemImageView);
+                options.fallback(R.drawable.slika0_thumb);
 
-                    Log.v(LOG,photoThumbUri+" photoThumbUri");
+                GlideApp.with((Fragment) mViewHolderClicked)
+                        .load(photoThumbUri)
+                        .circleCrop()
+                        .error(R.drawable.ic_person_black_48dp)
+                        .into(holder.mItemImageView);
+
+                Log.v(LOG,photoThumbUri+" photoThumbUri");
 
                     String name = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
                     Log.v(LOG, "string iz cursora" + name);
