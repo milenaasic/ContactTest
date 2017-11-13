@@ -160,7 +160,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void viewHolderClicked(View v,int position) {
 
-        Toast.makeText(getActivity(),"cliced item nb "+((Integer)position).toString(),Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(),"cliced item nb "+((Integer)position).toString(),Toast.LENGTH_SHORT).show();
 
         if (filterCursor != null && filterCursor.getCount() != 0) {
             if (filterCursor.moveToPosition(position)) {
