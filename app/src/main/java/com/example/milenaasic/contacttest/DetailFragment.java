@@ -1,18 +1,27 @@
 package com.example.milenaasic.contacttest;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,12 +33,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.annotation.GlideModule;
 
+import static android.Manifest.permission.READ_CONTACTS;
 
-public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+
+public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private static final String DEBUG="detailfragment";
 
     private static final int DETAIL_LOADER_ID=15;
+    private static final int REQUEST_PHONE_CALL=100;
 
     private static final String ARG_PARAM1 = "id";
     private static final String ARG_PARAM2 = "lookup";
@@ -44,7 +56,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private OnDetailFragmentInteractionListener mListener;
 
     //pretraga telefona na osnovu ID-a i LOOKUP_KEY-a
-    private static final String[]PROJECTION_PHONES={ContactsContract.CommonDataKinds.Phone._ID,
+    private static final String[]PROJECTION_PHONES={
+            ContactsContract.CommonDataKinds.Phone._ID,
             ContactsContract.CommonDataKinds.Phone.NUMBER,
             ContactsContract.CommonDataKinds.Phone.TYPE,
             ContactsContract.CommonDataKinds.Phone.LABEL};
@@ -54,13 +67,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static final int CURSOR_PHONE_TYPE=2;
     private static final int CURSOR_PHONE_LABEL=3;
 
-    private static String SELECTION_PHONES= ContactsContract.Data.LOOKUP_KEY+"=?";
+    private static String SELECTION_PHONES= ContactsContract.Data.LOOKUP_KEY+"=?" +
+            " AND " + ContactsContract.Data.MIMETYPE + " = " +
+            "'" + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "'";
     private String [] phoneSelectionArguments={""};
-    private String mLookupKey;
 
 
-    TextView phoneNumber;
-
+    TextView phoneNumber0;
+    CardView cardView0;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -93,8 +107,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         View rootView=inflater.inflate(R.layout.fragment_detail, container, false);
         TextView displayName =rootView.findViewById(R.id.mytextView);
         displayName.setText(contactName);
-        phoneNumber=rootView.findViewById(R.id.phonetextView);
+        phoneNumber0=rootView.findViewById(R.id.phonetextView0);
         ImageView image=rootView.findViewById(R.id.myimageView);
+         cardView0=rootView.findViewById(R.id.myCardContact0);
+        cardView0.setOnClickListener(this);
         //prikazi sliku ako je ima
 
         Uri contactUri= ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,contactId);
@@ -104,8 +120,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         GlideApp.with(this)
                 .load(photoThumbUri)
                 .centerCrop()
-                .fallback(R.drawable.slika0_thumb)
-                .error(R.drawable.ic_person_black_48dp)
+                .error(R.drawable.icons8_contacts_big)
                 .into(image);
 
         return rootView;
@@ -163,10 +178,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             Log.v(DEBUG,((Integer)n).toString()+" broj redova u onLoadFinish");
         }
 
-        if (data.getCount()!=0 && data.moveToPosition(0)) {
+        if (data.getCount()!=0){
+            for(int i=0;i<data.getCount();i++){
 
-            String contactNumber = data.getString(CURSOR_PHONE_NUMBER);
-            phoneNumber.setText(contactNumber);
+                if(data.moveToPosition(i)){
+                    String contactNumber = data.getString(CURSOR_PHONE_NUMBER);
+                    Log.v(DEBUG,"contact number broj " +i+" "+contactNumber);
+                    phoneNumber0.setText(contactNumber);
+                    int phoneType = data.getInt(CURSOR_PHONE_TYPE);
+                    Log.v(DEBUG,"contact number tip " +i+((Integer)phoneType).toString());
+
+                }
+            }
+
 
         }
     }
@@ -176,8 +200,83 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     }
 
+    @Override
+    public void onClick(View v) {
+        //pritisnut je Card View sa brojem, pozovi
+
+        if(checkPhoneCallPermission()) {
+            switch (v.getId()) {
+                case R.id.myCardContact0: {
+                    String normilizedNumber = normilizeNumber(phoneNumber0);
+                    Intent intentToCall=new Intent(Intent.ACTION_CALL);
+                    String telefon="tel:0113108888,,"+normilizedNumber;
+                    intentToCall.setData(Uri.parse(telefon));
+
+                    startActivity(intentToCall);
+
+                }
+                default: {
+                    Log.v(DEBUG,"switch mycardContact0 nije");
+                }
+
+            }
+        }
+
+    }
+
+    private String normilizeNumber(TextView phoneNumber0) {
+        return "9";
+    }
+
 
     public interface OnDetailFragmentInteractionListener {
         void onDetailFragmentInteraction(Uri uri);
     }
+
+
+
+    private boolean checkPhoneCallPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)) {
+            Snackbar.make(cardView0, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+
+
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_PHONE_CALL);
+                        }
+                    }).show();
+        } else {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_PHONE_CALL);
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_PHONE_CALL) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.v(DEBUG,"permission call phone callback premission");
+                String normilizedNumber = normilizeNumber(phoneNumber0);
+                Intent intentToCall=new Intent(Intent.ACTION_CALL);
+                String telefon="tel:0113108888,,9";
+                intentToCall.setData(Uri.parse(telefon));
+
+                startActivity(intentToCall);
+
+            }
+        }else {
+            Log.v(DEBUG,"nema dozvolu za poyiv");
+        };
+    }
+
+
 }

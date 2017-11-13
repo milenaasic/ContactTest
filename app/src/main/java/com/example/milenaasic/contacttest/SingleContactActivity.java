@@ -17,7 +17,7 @@ public class SingleContactActivity extends AppCompatActivity implements DetailFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_contact);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.mySingleToolbar);
-        myToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_48dptrans);
+        myToolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp);
         myToolbar.setTitle("");
         // uradi setHomeButtonasUpEnabled
         setSupportActionBar(myToolbar);

@@ -103,7 +103,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 GlideApp.with((Fragment) mViewHolderClicked)
                         .load(photoThumbUri)
                         .circleCrop()
-                        .error(R.drawable.ic_person_black_48dp)
+                        .error(R.drawable.icons8_user)
                         .into(holder.mItemImageView);
 
                 Log.v(LOG,photoThumbUri+" photoThumbUri");
