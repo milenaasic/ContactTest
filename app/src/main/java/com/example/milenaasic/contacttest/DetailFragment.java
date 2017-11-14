@@ -243,18 +243,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             return true;
         }
         if (shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)) {
-            Snackbar.make(cardView0, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(cardView0, R.string.permission_rationale_phone_call, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
 
 
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_PHONE_CALL);
+                            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
                         }
                     }).show();
         } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_PHONE_CALL);
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
         }
         return false;
     }

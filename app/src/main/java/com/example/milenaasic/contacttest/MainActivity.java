@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
             return true;
         }
         if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
-            Snackbar.make(mCoordinatorLayout, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mCoordinatorLayout, R.string.permission_rationale_contacts, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
 
@@ -93,11 +93,13 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v(LOG,"permission read contacts callback premission");
+                Log.v(LOG, "permission read contacts callback premission");
                 getSupportFragmentManager().beginTransaction().add(R.id.containerContactsList, new ContactsFragment()).commit();
 
-
+            } else {
+                this.finish();
             }
-        }else finish();
+
+        }
     }
 }
