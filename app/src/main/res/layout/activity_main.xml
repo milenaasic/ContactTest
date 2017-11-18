@@ -17,7 +17,10 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:theme="?attr/actionBarTheme"
+        android:titleTextColor="@color/primaryTextColor"
+        app:title="Call Via Veritel"
+        app:titleTextColor="@color/primaryTextColor" />
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/containerContactsList"

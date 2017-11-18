@@ -150,7 +150,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
             Log.v(DEBUG,((Integer)n).toString()+"u onLoadFinish");
         }
         filterCursor=data;
-        mAdapter.setFilterCursor(filterCursor);
+
+        mAdapter.setFilterCursorAndFilterString(filterCursor,mCurrentFilter);
 
     }
 
@@ -196,7 +197,10 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         if (mCurrentFilter != null && mCurrentFilter.equals(newFilter)) {
             return true;
         }
+
         mCurrentFilter = newFilter;
+
+
         Log.v(DEBUG,mCurrentFilter+" =mCurrentFilter");
         getLoaderManager().restartLoader(0, null, this);
         return true;
@@ -217,7 +221,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         // This is called when the last Cursor provided to onLoadFinished()
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
-        mAdapter.setFilterCursor(null);
+        mAdapter.setFilterCursorAndFilterString(null,null);
     }
 
 

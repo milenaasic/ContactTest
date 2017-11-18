@@ -5,31 +5,86 @@
     android:id="@+id/itemLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="?android:attr/selectableItemBackground">
+    android:orientation="vertical"
+    >
 
-    <ImageView
-        android:id="@+id/itemImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="5dp"
-        android:paddingBottom="5dp"
-        android:paddingEnd="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingStart="5dp"
-        android:paddingTop="5dp"
-        app:srcCompat="@android:drawable/ic_menu_myplaces"
-        tools:padding="5dp" />
-
-    <TextView
-        android:id="@+id/itemTextView"
+    <FrameLayout
+        android:id="@+id/hideandshow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:layout_weight="1"
-        android:text="mali tekst"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="72dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="1dp"
+
+            android:elevation="1dp"
+            android:paddingBottom="2dp"
+            android:paddingEnd="2dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingStart="2dp"
+            android:paddingTop="2dp">
+
+        </FrameLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/touchLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/firstLetterView"
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:text="A"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="36sp"
+            android:typeface="serif" />
+
+        <TextView
+            android:id="@+id/itemTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+
+            android:gravity="center_vertical"
+            android:text="mali tekst"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="20sp"
+            android:typeface="sans"
+            tools:typeface="sans" />
+
+        <ImageView
+            android:id="@+id/itemImageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:cropToPadding="false"
+            android:paddingBottom="4dp"
+            android:paddingEnd="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingStart="4dp"
+            android:paddingTop="4dp"
+            tools:cropToPadding="false" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

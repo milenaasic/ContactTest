@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ContactTest</string>
+    <string name="app_name">Veritel</string>
     <string name="permission_rationale_contacts">Need permission to access contacts </string>
     <string name="permission_rationale_phone_call">Need permission to make a call</string>
     <string name="searchHint">Search</string>
