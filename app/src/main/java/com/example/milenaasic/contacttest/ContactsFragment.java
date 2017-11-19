@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -32,6 +33,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     //promenljive vezane za UI View elemente
     RecyclerView mRecyclerView;
     MyContactRecyclerViewAdapter mAdapter;
+    TextView nbOfFilteredItems;
 
     //SearchView mSearchView;
     private SearchView mSearchView;
@@ -84,6 +86,9 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         mSearchView=rootView.findViewById(R.id.mySearchView);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(false);
+
+        nbOfFilteredItems=rootView.findViewById(R.id.nbFilteredItems);
+
         Log.v(DEBUG,"onCreateView");
         return rootView;
     }
@@ -93,11 +98,10 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getLoaderManager().initLoader(LOADER_ID,null,this);
-
         mAdapter=new MyContactRecyclerViewAdapter(null,this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
+        getLoaderManager().initLoader(LOADER_ID,null,this);
 
     }
 
@@ -153,6 +157,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
         mAdapter.setFilterCursorAndFilterString(filterCursor,mCurrentFilter);
 
+        nbOfFilteredItems.setText(((Integer)data.getCount()).toString()+" "+getString(R.string.foundContacts));
     }
 
 

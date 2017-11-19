@@ -35,7 +35,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     private static final String LOG="MyConttRecViewAdapter";
     private static OnViewHolderClicked mViewHolderClicked;
     private Cursor filterCursor;
-    private String filterString="";
+    private String filterString;
 
 
     // konstante koje definišu Cursor kolone, ali koje mi mozda ovde ne trebaju, jer ovde ne vadim ništa iz kolona
@@ -54,19 +54,15 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
     void setFilterCursorAndFilterString(Cursor c, String filter){
 
-            if (c!=null) {
+        if (c!=null) {
                 filterCursor = c;
                 Log.v(LOG,"setovani cursor nije null");
 
                 int n=c.getCount();
                 Log.v(LOG,((Integer)n).toString());
-            }
+        }
 
-            if(filter!=null){
-
-                filterString=filter;
-
-            }else filterString="";
+        filterString=filter;
 
         notifyDataSetChanged();
         Log.v(LOG,"notifyDataset");
@@ -122,11 +118,12 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                     Log.v(LOG,"filter string "+filterString);
 
                     //oboj slova koja su u upitu
-                if(filterString!=null&&(!TextUtils.isEmpty(filterString))){
+                if(filterString!=null){
 
                     SpannableString spannableString=new SpannableString(newName);
-                    ForegroundColorSpan colorSpan=new ForegroundColorSpan(Color.RED);
-                    int startIndex=newName.indexOf(filterString);
+                    ForegroundColorSpan colorSpan=new ForegroundColorSpan(Color.rgb(197,17,98));
+
+                    int startIndex=(newName.toLowerCase()).indexOf(filterString.toLowerCase());
                     Log.v(LOG,"start ineks je "+((Integer)startIndex).toString());
 
                     if(startIndex!=-1){
@@ -137,13 +134,13 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                         spannableString.setSpan(colorSpan,startIndex,lastIndex,0);
                         Log.v(LOG,"uradio spannableString");
                         holder.mItemTextView.setText(spannableString);
-
-                    }
+                    }else {
+                        holder.mItemTextView.setText(newName);}
 
                 }else holder.mItemTextView.setText(newName);
 
 
-                    Log.v(LOG, "setovan text ");
+                                  Log.v(LOG, "setovan text ");
 
                 if (position==0){
 
