@@ -86,6 +86,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         mSearchView=rootView.findViewById(R.id.mySearchView);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(false);
+        mSearchView.clearFocus();
 
         nbOfFilteredItems=rootView.findViewById(R.id.nbFilteredItems);
 
@@ -184,7 +185,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return true;
+
+        return false;
     }
 
     @Override

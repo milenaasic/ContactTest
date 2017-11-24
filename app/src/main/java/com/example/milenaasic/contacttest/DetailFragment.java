@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -74,7 +75,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     TextView phoneNumber0;
-    CardView cardView0;
+    LinearLayout cardView0;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -120,7 +121,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         GlideApp.with(this)
                 .load(photoThumbUri)
                 .centerCrop()
-                .error(R.drawable.icons8_contacts_big)
+                .error(R.drawable.ikonaobrisplava)
                 .into(image);
 
         return rootView;

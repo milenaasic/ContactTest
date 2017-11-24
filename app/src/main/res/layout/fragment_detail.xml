@@ -17,30 +17,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:foregroundGravity=""
-            android:scaleType="center"
-            app:srcCompat="@drawable/icons8_contacts_big"
+            android:scaleType="centerInside"
+            app:srcCompat="@color/colorPrimary"
             tools:foregroundGravity="bottom" />
 
-        <TextView
-            android:id="@+id/mytextView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:layout_gravity="bottom"
-            android:alpha="0.6"
-            android:background="@android:color/darker_gray"
-            android:gravity="bottom"
-            android:paddingBottom="8dp"
-            android:paddingEnd="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:text="@string/call_via_veritel"
+            android:orientation="horizontal">
 
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@android:color/white"
-            android:textColorHighlight="@color/colorAccent"
-            tools:mockup_opacity="@android:color/background_light" />
+            <TextView
+                android:id="@+id/emptyView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/mytextView"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+
+                android:paddingLeft="16dp"
+                android:text="@string/call_via_veritel"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@android:color/white"
+                android:textColorHighlight="@color/colorAccent"
+                android:textSize="24dp" />
+        </LinearLayout>
 
 
     </FrameLayout>
@@ -49,106 +57,38 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:elevation="4dp"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:id="@+id/myCardContact0"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            app:cardElevation="8dp">
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginTop="16dp">
 
 
-            <LinearLayout
-                android:id="@+id/callButton0"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/imageView0"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp"
+                app:srcCompat="@android:drawable/sym_action_call" />
+
+            <TextView
+                android:id="@+id/phonetextView0"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:baselineAligned="false">
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textSize="@dimen/contactItemTextSize" />
 
-
-                <ImageView
-                    android:id="@+id/imageView0"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="4dp"
-                    app:srcCompat="@android:drawable/sym_action_call" />
-
-                <TextView
-                    android:id="@+id/phonetextView0"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="5"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="8dp"
-                    android:text="TextView"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/myCardContact1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            app:cardElevation="8dp"
-            android:visibility="gone">
-
-
-            <LinearLayout
-                android:id="@+id/callButton1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:baselineAligned="false">
-
-
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="4dp"
-                    app:srcCompat="@android:drawable/sym_action_call" />
-
-                <TextView
-                    android:id="@+id/phonetextView1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="5"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="8dp"
-                    android:text="TextView"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-
-        </android.support.v7.widget.CardView>
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -105,7 +105,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
                 GlideApp.with((Fragment) mViewHolderClicked)
                         .load(photoThumbUri)
-                        .error(R.drawable.ikonaobrisplava)
+                        .error(R.drawable.ic_account_circle_purple_24dp)
                         .circleCrop()
                         .into(holder.mItemImageView);
 
@@ -121,7 +121,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 if(filterString!=null){
 
                     SpannableString spannableString=new SpannableString(newName);
-                    ForegroundColorSpan colorSpan=new ForegroundColorSpan(Color.rgb(197,17,98));
+                    ForegroundColorSpan colorSpan=new ForegroundColorSpan(Color.rgb(255,109,00));
 
                     int startIndex=(newName.toLowerCase()).indexOf(filterString.toLowerCase());
                     Log.v(LOG,"start ineks je "+((Integer)startIndex).toString());
