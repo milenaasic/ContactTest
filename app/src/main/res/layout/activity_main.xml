@@ -11,6 +11,15 @@
     tools:context="com.example.milenaasic.contacttest.MainActivity">
 
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mytoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        tools:title="@string/call_via_veritel" />
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/containerContactsList"

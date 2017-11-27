@@ -9,7 +9,7 @@
         android:right="5dp"
         android:top="5dp"/>
 
-    <solid android:color="@color/secondaryTextColor"/>
+    <solid android:color="@color/colorPrimary"/>
 
 </shape>
 

@@ -23,31 +23,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/emptyView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="TextView" />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/mytextView"
                 android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_weight="4"
                 android:gravity="center_vertical"
 
-                android:paddingLeft="16dp"
+                android:minHeight="?attr/actionBarSize"
+                android:paddingEnd="16dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="16dp"
                 android:text="@string/call_via_veritel"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@android:color/white"
+                android:textColor="@color/primaryTextColor"
                 android:textColorHighlight="@color/colorAccent"
-                android:textSize="24dp" />
+                android:textSize="30sp"
+                android:typeface="normal" />
         </LinearLayout>
 
 
@@ -56,39 +60,72 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/myCardContact0"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp">
 
 
             <ImageView
                 android:id="@+id/imageView0"
-                android:layout_width="0dp"
+                android:layout_width="72dp"
                 android:layout_height="48dp"
-                android:layout_weight="1"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:paddingBottom="12dp"
                 android:paddingTop="12dp"
-                app:srcCompat="@android:drawable/sym_action_call" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/sym_action_call"
+                android:layout_marginLeft="8dp" />
 
             <TextView
                 android:id="@+id/phonetextView0"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:paddingBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:paddingBottom="4dp"
                 android:paddingLeft="16dp"
-                android:paddingTop="8dp"
+                android:paddingTop="4dp"
                 android:text="TextView"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textSize="@dimen/contactItemTextSize" />
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline5"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"
+                android:text="Mobile"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/phonetextView0"
+                app:layout_constraintTop_toBottomOf="@+id/phonetextView0" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="294dp"
+                android:layout_marginStart="89dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_percent="0.25"
+                app:layout_constraintHorizontal_bias="0.32"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
 

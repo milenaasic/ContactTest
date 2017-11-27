@@ -105,7 +105,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
                 GlideApp.with((Fragment) mViewHolderClicked)
                         .load(photoThumbUri)
-                        .error(R.drawable.ic_account_circle_purple_24dp)
+                        .error(R.drawable.icons8_male_user_50)
                         .circleCrop()
                         .into(holder.mItemImageView);
 

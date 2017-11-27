@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Toolbar myToolbar = (Toolbar) findViewById(R.id.mytoolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.mytoolbar);
 
-        //setSupportActionBar(myToolbar);
+        setSupportActionBar(myToolbar);
         mCoordinatorLayout=findViewById(R.id.containerContactsList);
 
         // ako imas permission ucitaj fragment
