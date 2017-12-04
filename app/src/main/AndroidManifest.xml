@@ -3,7 +3,7 @@
     package="com.example.milenaasic.contacttest">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -13,22 +13,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:launchMode="singleTop">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-        <activity android:name=".SingleContactActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/DetailContactTheme">
+        <activity
+            android:name=".SingleContactActivity"
+            android:parentActivityName=".MainActivity"></activity>
 
-        </activity>
-        
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".MainActivity" ></activity>
+
+
     </application>
 
 </manifest>

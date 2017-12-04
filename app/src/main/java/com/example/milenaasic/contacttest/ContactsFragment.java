@@ -46,7 +46,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String[] PROJECTION={  ContactsContract.Contacts._ID ,
                                                 ContactsContract.Contacts.LOOKUP_KEY,
                                                 ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                                                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI};
+                                                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
+                                                ContactsContract.Contacts.PHOTO_URI};
     private static final String SELECTION=ContactsContract.Contacts.DISPLAY_NAME_PRIMARY+ "LIKE ?";
 
     private String[] mSelectionArgs;
@@ -57,6 +58,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     private static final int CURSOR_COLUMN_LOOKUP=1;
     private static final int CURSOR_DISPLAY_NAME_PRIMARY=2;
     private static final int CURSOR_PHOTO_THUMBNAIL_URI=3;
+    private static final int CURSOR_PHOTO_URI=4;
 
 
 
@@ -121,6 +123,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mAdapter.setFilterCursorAndFilterString(null,null);
+
     }
 
     @Override

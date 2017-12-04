@@ -28,63 +28,81 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/touchLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:orientation="horizontal"
-        android:paddingBottom="2dp"
-        android:paddingTop="2dp">
+        android:layout_height="?attr/actionBarSize">
 
         <TextView
             android:id="@+id/firstLetterView"
             style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="0dp"
+            android:layout_width="32dp"
 
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
 
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingLeft="16dp"
-            android:paddingStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical|center_horizontal"
             android:text="A"
-            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/colorAccent"
             android:textSize="36sp"
-            android:typeface="serif" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/itemTextView"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
             android:text="mali tekst"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="18sp"
             android:typeface="sans"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/itemImageView"
+            app:layout_constraintStart_toEndOf="@+id/firstLetterView"
+            app:layout_constraintTop_toTopOf="parent"
             tools:typeface="sans" />
 
         <ImageView
             android:id="@+id/itemImageView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
 
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_weight="1"
+            android:layout_marginEnd="16dp"
             android:adjustViewBounds="false"
             android:cropToPadding="false"
-            android:paddingBottom="2dp"
-            android:paddingEnd="2dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:paddingStart="2dp"
-            android:paddingTop="2dp"
-            app:srcCompat="@drawable/ic_account_circle_white_purple_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:cropToPadding="false" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/letterInCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="A"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/itemImageView"
+            app:layout_constraintEnd_toEndOf="@+id/itemImageView"
+            app:layout_constraintStart_toStartOf="@+id/itemImageView"
+            app:layout_constraintTop_toTopOf="@+id/itemImageView" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
 </LinearLayout>

@@ -33,6 +33,7 @@ import com.bumptech.glide.request.target.Target;
 public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContactRecyclerViewAdapter.ViewHolder> {
 
     private static final String LOG="MyConttRecViewAdapter";
+
     private static OnViewHolderClicked mViewHolderClicked;
     private Cursor filterCursor;
     private String filterString;
@@ -43,6 +44,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     private static final int CURSOR_COLUMN_LOOKUP=1;
     private static final int CURSOR_DISPLAY_NAME_PRIMARY=2;
     private static final int CURSOR_PHOTO_THUMBNAIL_URI=3;
+    private static final int CURSOR_PHOTO_URI=4;
 
 
     MyContactRecyclerViewAdapter(Cursor cursor, OnViewHolderClicked listener) {
@@ -98,20 +100,57 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 int contactId=filterCursor.getInt(CURSOR_COLUMN_ID);
                 Uri contactUri= ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,contactId);
                 Uri photoThumbUri=Uri.withAppendedPath(contactUri,ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+                Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+                boolean hasThumbnail=filterCursor.isNull(CURSOR_PHOTO_THUMBNAIL_URI);
+                boolean hasPhoto=filterCursor.isNull(CURSOR_PHOTO_URI);
 
+                String newName = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
+
+                Log.v(LOG,"ima thumbnail :"+((Boolean)hasThumbnail).toString()+" , posizija "+position);
+                Log.v(LOG,"ima sliku :"+((Boolean)hasPhoto).toString()+" , posizija "+position);
+
+
+                //ucitavanje slike
                 RequestOptions options = new RequestOptions();
                 options.circleCrop();
 
-
-                GlideApp.with((Fragment) mViewHolderClicked)
+                if(!hasThumbnail){
+                        GlideApp.with((Fragment) mViewHolderClicked)
                         .load(photoThumbUri)
-                        .error(R.drawable.icons8_male_user_50)
+                        .error(R.drawable.roundcornersrect_shape_picture)
                         .circleCrop()
                         .into(holder.mItemImageView);
 
-                Log.v(LOG,photoThumbUri+" photoThumbUri");
+                    holder.mletterInCircle.setText("");
 
-                    String newName = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
+                    Log.v(LOG,photoThumbUri+" photoThumbUri");
+
+                }else {
+                    if (!hasPhoto) {
+                        GlideApp.with((Fragment) mViewHolderClicked)
+                                .load(photoUri)
+                                .error(R.drawable.roundcornersrect_shape_picture)
+                                .circleCrop()
+                                .into(holder.mItemImageView);
+
+                            holder.mletterInCircle.setText("");
+
+                    } else {
+                        GlideApp.with((Fragment) mViewHolderClicked)
+                                .load(R.drawable.roundcornersrect_shape_picture)
+                                .error(R.drawable.roundcornersrect_shape_picture)
+                                .circleCrop()
+                                .into(holder.mItemImageView);
+
+                        char firstLetter=newName.trim().charAt(0);
+                        char[] data={firstLetter};
+                        holder.mletterInCircle.setText(new String(data).toUpperCase());
+
+                    };
+                }
+
+
+
 
 
                     Log.v(LOG, "string iz cursora" + newName);
@@ -145,7 +184,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 if (position==0){
 
                     char firstLetter=newName.charAt(0);
-                    char data[]={firstLetter};
+                    char[] data={firstLetter};
                     holder.showSeparator.setVisibility(View.GONE);
 
                     holder.firstLetter.setText(new String(data));
@@ -172,9 +211,9 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                             holder.firstLetter.setText(new String(""));
                             holder.showSeparator.setVisibility(View.GONE);
                         }
+                        filterCursor.moveToPosition(position);
                     }
                 }
-
 
 
 
@@ -203,6 +242,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
         public TextView firstLetter;
         public FrameLayout showSeparator;
         public TextView touchLayout;
+        public TextView mletterInCircle;
 
 
         public ViewHolder(View view) {
@@ -213,6 +253,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
             showSeparator=(FrameLayout)view.findViewById(R.id.hideandshow);
             touchLayout=(TextView)view.findViewById(R.id.itemTextView) ;
             touchLayout.setOnClickListener(this);
+            mletterInCircle=(TextView)view.findViewById(R.id.letterInCircle);
         }
 
 

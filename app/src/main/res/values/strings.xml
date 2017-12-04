@@ -5,5 +5,17 @@
     <string name="searchHint">Search</string>
     <string name="call_via_veritel">Call via VeriTel</string>
     <string name="foundContacts">found</string>
+    <string name="action_settings">Settings</string>
+
+
+
+
+    // preference strings
+
+    <string name="list_preference_phones_key">list_preference_phones</string>
+    <string name="pref_list_entry_key_0">VeriTel 1, 011 43 00 77</string>
+    <string name="pref_list_entry_key_1">VeriTel 2, 011 42 40 999</string>
+    <string name="pref_list_entry_value_0">tel:0114300777,</string>
+    <string name="pref_list_entry_value_1">tel:0114240999,</string>
 
 </resources>

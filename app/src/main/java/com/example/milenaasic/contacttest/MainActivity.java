@@ -3,16 +3,20 @@ package com.example.milenaasic.contacttest;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         setSupportActionBar(myToolbar);
         mCoordinatorLayout=findViewById(R.id.containerContactsList);
 
+
         // ako imas permission ucitaj fragment
         if(savedInstanceState==null){
             if (checkReadContacsPermission()) {
@@ -49,6 +54,28 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
 
 
     }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.main_activity_app_bar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        int id=menuItem.getItemId();
+        if(id==R.id.action_settings){
+            Intent startSettingsActivity=new Intent(this,SettingsActivity.class);
+            startActivity(startSettingsActivity);
+            return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
+
+    }
+
 
     @Override
     public void onContactsFragmentInteraction (int id,String lookup,String name){

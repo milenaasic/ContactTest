@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -38,7 +40,8 @@ import com.bumptech.glide.annotation.GlideModule;
 import static android.Manifest.permission.READ_CONTACTS;
 
 
-public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener ,
+        SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static final String DEBUG="detailfragment";
 
@@ -53,6 +56,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private int contactId ;
     private String contactLookupKey;
     private String contactName;
+
+    //broj koji se poziva
+
 
 
     private OnDetailFragmentInteractionListener mListener;
@@ -77,6 +83,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     TextView phoneNumber0;
     ConstraintLayout cardView0;
+    private String contactNumber;
+    private String veriTelTelefon;
+
 
     public DetailFragment() {
         // Required empty public constructor
@@ -100,6 +109,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             contactLookupKey = getArguments().getString(ARG_PARAM2);
             contactName = getArguments().getString(ARG_PARAM3);
         }
+
+        setUpPreferences();
+
+    }
+
+    private void setUpPreferences() {
+
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        veriTelTelefon=sharedPreferences.getString( "list_preference_phones", "greska");
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -145,6 +165,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -184,7 +205,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             for(int i=0;i<data.getCount();i++){
 
                 if(data.moveToPosition(i)){
-                    String contactNumber = data.getString(CURSOR_PHONE_NUMBER);
+                    contactNumber = data.getString(CURSOR_PHONE_NUMBER);
                     Log.v(DEBUG,"contact number broj " +i+" "+contactNumber);
                     phoneNumber0.setText(contactNumber);
                     int phoneType = data.getInt(CURSOR_PHONE_TYPE);
@@ -211,7 +232,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 case R.id.myCardContact0: {
                     String normilizedNumber = normilizeNumber(phoneNumber0);
                     Intent intentToCall=new Intent(Intent.ACTION_CALL);
-                    String telefon="tel:0113108888,,"+normilizedNumber;
+
+                    String telefon=veriTelTelefon+normilizedNumber;
+                    Log.v(DEBUG,"veritel telefon : "+telefon);
                     intentToCall.setData(Uri.parse(telefon));
 
                     startActivity(intentToCall);
@@ -227,7 +250,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private String normilizeNumber(TextView phoneNumber0) {
-        return "9";
+       String numberToCall=phoneNumber0.getText().toString();
+        Log.v(DEBUG,numberToCall);
+        return numberToCall+"#";}
+
+
+    // preferences ucitavanje
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(getString(R.string.list_preference_phones_key))){
+
+            veriTelTelefon=sharedPreferences.getString(key,"greska");
+        }
+
     }
 
 
