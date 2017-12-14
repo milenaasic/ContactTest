@@ -134,14 +134,14 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                                 .into(holder.mItemImageView);
 
                             holder.mletterInCircle.setText("");
-
+                        Log.v(LOG,"big photo loaded");
                     } else {
                         GlideApp.with((Fragment) mViewHolderClicked)
                                 .load(R.drawable.roundcornersrect_shape_picture)
                                 .error(R.drawable.roundcornersrect_shape_picture)
                                 .circleCrop()
                                 .into(holder.mItemImageView);
-
+                        Log.v(LOG,"krug sa slovom");
                         char firstLetter=newName.trim().charAt(0);
                         char[] data={firstLetter};
                         holder.mletterInCircle.setText(new String(data).toUpperCase());

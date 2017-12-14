@@ -26,6 +26,8 @@
             android:layout_marginTop="0dp"
             android:background="@android:color/background_light"
             android:baselineAligned="false"
+            android:clickable="true"
+            android:contextClickable="true"
             android:elevation="4dp"
             android:imeOptions="flagNoExtractUi"
             android:queryHint="@string/searchHint" />

@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,24 +23,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
 
-import static android.Manifest.permission.READ_CONTACTS;
-
-
-public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener ,
-        SharedPreferences.OnSharedPreferenceChangeListener{
+public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        SharedPreferences.OnSharedPreferenceChangeListener,PhonesRecyclerViewAdapter.OnPhoneViewHolderClicked{
 
     private static final String DEBUG="detailfragment";
 
@@ -57,7 +50,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private String contactLookupKey;
     private String contactName;
 
-    //broj koji se poziva
 
 
 
@@ -81,10 +73,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private String [] phoneSelectionArguments={""};
 
 
-    TextView phoneNumber0;
+    /*TextView phoneNumber0;
     ConstraintLayout cardView0;
-    private String contactNumber;
+    private String contactNumber;*/
     private String veriTelTelefon;
+
+    ConstraintLayout mMyConstraintLayout;
+    RecyclerView mPhonesRecyclerView;
+    PhonesRecyclerViewAdapter mPhonesRecyclerViewAdapter;
+    private String chosenPhoneNumber;
 
 
     public DetailFragment() {
@@ -127,23 +124,59 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView=inflater.inflate(R.layout.fragment_detail, container, false);
+
+
         TextView displayName =rootView.findViewById(R.id.mytextView);
-        displayName.setText(contactName);
-        phoneNumber0=rootView.findViewById(R.id.phonetextView0);
-        ImageView image=rootView.findViewById(R.id.myimageView);
-         cardView0=rootView.findViewById(R.id.myCardContact0);
-        cardView0.setOnClickListener(this);
-        //prikazi sliku ako je ima
+        mMyConstraintLayout=rootView.findViewById(R.id.myConstraintLayout);
+        mPhonesRecyclerView=rootView.findViewById(R.id.phonesRecyclerView);
 
+
+
+        ImageView mFullPictureImage=rootView.findViewById(R.id.fullPictureImage);
+        ImageView mimageView_ThumbPhoto_outer=rootView.findViewById(R.id.imageView_ThumbPhoto_outer);
+        ImageView mimageView_ThumbPhoto_inner=rootView.findViewById(R.id.imageView_ThumbPhoto_Inner);
+
+        ImageView mStatusBarBackground=getActivity().findViewById(R.id.status_bar_background);
+
+        // Uri kontakta za koji se otvara DetailFragment
         Uri contactUri= ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,contactId);
-        Uri photoThumbUri=Uri.withAppendedPath(contactUri,ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
-        //Uri photoThumbUri2=Uri.withAppendedPath(contactUri,ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+        //Uri thumnaila i velike slike za taj kontakt
+        Uri fullSizePhoto=Uri.withAppendedPath(contactUri,ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+        //Uri thumbSizePhoto=Uri.withAppendedPath(contactUri,ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
 
-        GlideApp.with(this)
-                .load(photoThumbUri)
-                .centerCrop()
-                .error(R.color.colorPrimary)
-                .into(image);
+        //provera da li postoji velika slika
+        Cursor photocursor=getActivity().getContentResolver().query(contactUri,
+                new String[] {ContactsContract.Contacts.PHOTO_URI},
+                null, null, null);
+
+        if(photocursor!=null && photocursor.moveToFirst()&& !photocursor.isNull(0)){
+
+                    GlideApp.with(this)
+                        .load(fullSizePhoto)
+                        .error(R.color.colorPrimary)
+                        .into(mFullPictureImage);
+
+                    mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
+                    mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
+                    Log.v(DEBUG,"full size photo loaded");
+
+                    displayName.setBackgroundColor(getResources().getColor(R.color.greyTextBackgroundColor));
+                    mStatusBarBackground.setBackgroundColor(Color.TRANSPARENT);
+
+        }else{
+
+            displayName.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            //
+
+            mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
+            mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
+            mStatusBarBackground.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            Log.v(DEBUG,"set backround color");
+
+        }
+
+        displayName.setText(contactName);
+
 
         return rootView;
     }
@@ -171,6 +204,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // ovde setujem Recyclerview za telefone
+        mPhonesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mPhonesRecyclerViewAdapter=new PhonesRecyclerViewAdapter(null,this);
+        mPhonesRecyclerView.setAdapter(mPhonesRecyclerViewAdapter);
 
         getLoaderManager().initLoader(DETAIL_LOADER_ID,null,this);
 
@@ -199,32 +236,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
             int n=data.getCount();
             Log.v(DEBUG,((Integer)n).toString()+" broj redova u onLoadFinish");
+            mPhonesRecyclerViewAdapter.setPhoneCursor(data);
         }
 
-        if (data.getCount()!=0){
-            for(int i=0;i<data.getCount();i++){
-
-                if(data.moveToPosition(i)){
-                    contactNumber = data.getString(CURSOR_PHONE_NUMBER);
-                    Log.v(DEBUG,"contact number broj " +i+" "+contactNumber);
-                    phoneNumber0.setText(contactNumber);
-                    int phoneType = data.getInt(CURSOR_PHONE_TYPE);
-                    Log.v(DEBUG,"contact number tip " +i+((Integer)phoneType).toString());
-
-                }
-            }
-
-
-        }
     }
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        mPhonesRecyclerViewAdapter.setPhoneCursor(null);
     }
 
-    @Override
-    public void onClick(View v) {
+    //@Override
+   /* public void onClick(View v) {
         //pritisnut je Card View sa brojem, pozovi
 
         if(checkPhoneCallPermission()) {
@@ -247,12 +271,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             }
         }
 
-    }
+    }*/
 
-    private String normilizeNumber(TextView phoneNumber0) {
+    /*private String normilizeNumber(String phoneNumber0) {
        String numberToCall=phoneNumber0.getText().toString();
         Log.v(DEBUG,numberToCall);
-        return numberToCall+"#";}
+        return numberToCall+"#";}*/
 
 
     // preferences ucitavanje
@@ -263,6 +287,23 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             veriTelTelefon=sharedPreferences.getString(key,"greska");
         }
 
+    }
+
+    @Override
+    public void onPhoneItemClicked(String s) {
+        chosenPhoneNumber=s;
+        if (checkPhoneCallPermission()) {
+
+            Intent intentToCall = new Intent(Intent.ACTION_CALL);
+
+            String telefon = veriTelTelefon + chosenPhoneNumber + "#";
+            Log.v(DEBUG, "veritel telefon : " + telefon);
+            intentToCall.setData(Uri.parse(telefon));
+
+            startActivity(intentToCall);
+
+
+        }
     }
 
 
@@ -280,7 +321,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             return true;
         }
         if (shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)) {
-            Snackbar.make(cardView0, R.string.permission_rationale_phone_call, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mMyConstraintLayout, R.string.permission_rationale_phone_call, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
 
@@ -302,11 +343,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (requestCode == REQUEST_PHONE_CALL) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.v(DEBUG,"permission call phone callback premission");
-                String normilizedNumber = normilizeNumber(phoneNumber0);
-                Intent intentToCall=new Intent(Intent.ACTION_CALL);
-                String telefon="tel:0113108888,,9";
+                //String normilizedNumber = normilizeNumber("phoneNumber0");
+                Intent intentToCall = new Intent(Intent.ACTION_CALL);
+                String telefon = veriTelTelefon + chosenPhoneNumber + "#";
+                Log.v(DEBUG, "veritel telefon : " + telefon);
                 intentToCall.setData(Uri.parse(telefon));
-
                 startActivity(intentToCall);
 
             }
