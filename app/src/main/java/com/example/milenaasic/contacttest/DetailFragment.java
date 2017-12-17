@@ -159,18 +159,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
                     mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
                     Log.v(DEBUG,"full size photo loaded");
-
-                    displayName.setBackgroundColor(getResources().getColor(R.color.greyTextBackgroundColor));
-                    mStatusBarBackground.setBackgroundColor(Color.TRANSPARENT);
+                    int greyTransparent=getResources().getColor(R.color.colorPrimaryTransparent50);
+                    displayName.setBackgroundColor(greyTransparent);
+                    mStatusBarBackground.setBackgroundColor(getResources().getColor(R.color.colorPrimaryTransparent50));
 
         }else{
 
             displayName.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            //
-
+            //displayName.setTextColor(Color.BLACK);
             mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
             mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
             mStatusBarBackground.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
             Log.v(DEBUG,"set backround color");
 
         }
@@ -247,31 +247,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mPhonesRecyclerViewAdapter.setPhoneCursor(null);
     }
 
-    //@Override
-   /* public void onClick(View v) {
-        //pritisnut je Card View sa brojem, pozovi
 
-        if(checkPhoneCallPermission()) {
-            switch (v.getId()) {
-                case R.id.myCardContact0: {
-                    String normilizedNumber = normilizeNumber(phoneNumber0);
-                    Intent intentToCall=new Intent(Intent.ACTION_CALL);
 
-                    String telefon=veriTelTelefon+normilizedNumber;
-                    Log.v(DEBUG,"veritel telefon : "+telefon);
-                    intentToCall.setData(Uri.parse(telefon));
-
-                    startActivity(intentToCall);
-
-                }
-                default: {
-                    Log.v(DEBUG,"switch mycardContact0 nije");
-                }
-
-            }
-        }
-
-    }*/
 
     /*private String normilizeNumber(String phoneNumber0) {
        String numberToCall=phoneNumber0.getText().toString();

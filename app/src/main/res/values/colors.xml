@@ -8,6 +8,8 @@
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
     <color name="statusBarColor">#eeeeee</color>
-    <color name="greyTextBackgroundColor">#cc9e9e9e</color>
+    <color name="greyTextBackgroundColor">#7f9e9e9e</color>
+    <color name="colorPrimaryDarkTransparent50">#7f9499b7</color>
+    <color name="colorPrimaryTransparent50">#7fc5cae9</color>
 
 </resources>

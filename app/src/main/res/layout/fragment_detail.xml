@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
 
             android:layout_margin="0dp"
-            android:background="@color/greyTextBackgroundColor"
+            android:background="@color/colorPrimaryDarkTransparent50"
             android:gravity="center_vertical"
             android:minHeight="?attr/actionBarSize"
             android:paddingEnd="32dp"
@@ -43,7 +43,7 @@
             android:paddingStart="32dp"
             android:text="@string/call_via_veritel"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/primaryTextColor"
             android:textColorHighlight="@color/colorAccent"
             android:textSize="24sp"
             android:typeface="normal"
@@ -87,6 +87,7 @@
         android:id="@+id/phonesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="2" />
 
 

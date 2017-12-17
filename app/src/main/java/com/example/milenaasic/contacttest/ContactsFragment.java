@@ -1,18 +1,32 @@
 package com.example.milenaasic.contacttest;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,17 +36,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static android.support.v7.widget.helper.ItemTouchHelper.*;
+
 
 public class ContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        MyContactRecyclerViewAdapter.OnViewHolderClicked,SearchView.OnQueryTextListener {
+        MyContactRecyclerViewAdapter.OnViewHolderClicked,SearchView.OnQueryTextListener, SwipeController.ViewHolderSwipedListener {
 
-    private static final String DEBUG="ContactsFragment";
+    private static final String DEBUG = "ContactsFragment";
+
+    private static final int REQUEST_PHONE_CALL = 10;
+    String veriTelTelefon = "tel:011430077,";
+    String chosenPhoneNumber = "+3813240809";
     // interfejs prema Activity koja ga sadrzi
-    private OnContactsFragmentInteractionListener mListener;
+    private static OnContactsFragmentInteractionListener mListener;
 
     //promenljive vezane za UI View elemente
     RecyclerView mRecyclerView;
     MyContactRecyclerViewAdapter mAdapter;
+    SwipeController swipeController;
     TextView nbOfFilteredItems;
 
     //SearchView mSearchView;
@@ -40,28 +61,25 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     private String mCurrentFilter;
 
     //loader konstanta
-    private static final int LOADER_ID=10;
+    private static final int LOADER_ID = 10;
 
     //konstante za pretragu ContactsProvidera koja se radi preko Loader-a
-    private static final String[] PROJECTION={  ContactsContract.Contacts._ID ,
-                                                ContactsContract.Contacts.LOOKUP_KEY,
-                                                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                                                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
-                                                ContactsContract.Contacts.PHOTO_URI};
-    private static final String SELECTION=ContactsContract.Contacts.DISPLAY_NAME_PRIMARY+ "LIKE ?";
+    private static final String[] PROJECTION = {ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.LOOKUP_KEY,
+            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
+            ContactsContract.Contacts.PHOTO_URI};
+    private static final String SELECTION = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + "LIKE ?";
 
     private String[] mSelectionArgs;
 
     //Cursor koji prosledjujem u Adapter
     private Cursor filterCursor;
-    private static final int CURSOR_COLUMN_ID=0;
-    private static final int CURSOR_COLUMN_LOOKUP=1;
-    private static final int CURSOR_DISPLAY_NAME_PRIMARY=2;
-    private static final int CURSOR_PHOTO_THUMBNAIL_URI=3;
-    private static final int CURSOR_PHOTO_URI=4;
-
-
-
+    private static final int CURSOR_COLUMN_ID = 0;
+    private static final int CURSOR_COLUMN_LOOKUP = 1;
+    private static final int CURSOR_DISPLAY_NAME_PRIMARY = 2;
+    private static final int CURSOR_PHOTO_THUMBNAIL_URI = 3;
+    private static final int CURSOR_PHOTO_URI = 4;
 
 
     public ContactsFragment() {
@@ -84,15 +102,15 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_contact_list, container, false);
 
-        mRecyclerView=rootView.findViewById(R.id.myRecylerView);
-        mSearchView=rootView.findViewById(R.id.mySearchView);
+        mRecyclerView = rootView.findViewById(R.id.myRecylerView);
+        mSearchView = rootView.findViewById(R.id.mySearchView);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(false);
         mSearchView.clearFocus();
 
-        nbOfFilteredItems=rootView.findViewById(R.id.nbFilteredItems);
+        nbOfFilteredItems = rootView.findViewById(R.id.nbFilteredItems);
 
-        Log.v(DEBUG,"onCreateView");
+        Log.v(DEBUG, "onCreateView");
         return rootView;
     }
 
@@ -101,10 +119,18 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdapter=new MyContactRecyclerViewAdapter(null,this);
+        mAdapter = new MyContactRecyclerViewAdapter(null, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(LOADER_ID,null,this);
+        //setujem podrski za Swipe
+
+        swipeController = new SwipeController(0, ItemTouchHelper.RIGHT, this);
+        ItemTouchHelper mIth = new ItemTouchHelper(swipeController);
+
+        mIth.attachToRecyclerView(mRecyclerView);
+
+        getLoaderManager().initLoader(LOADER_ID, null, this);
+
 
     }
 
@@ -123,13 +149,13 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        mAdapter.setFilterCursorAndFilterString(null,null);
+        mAdapter.setFilterCursorAndFilterString(null, null);
 
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.v(DEBUG,"onCreateCursor");
+        Log.v(DEBUG, "onCreateCursor");
 
         Uri baseUri;
         if (mCurrentFilter != null) {
@@ -151,35 +177,33 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.v(DEBUG,"onLoadFinished");
+        Log.v(DEBUG, "onLoadFinished");
 
-        if (data!=null) {
+        if (data != null) {
 
-            int n=data.getCount();
-            Log.v(DEBUG,((Integer)n).toString()+"u onLoadFinish");
+            int n = data.getCount();
+            Log.v(DEBUG, ((Integer) n).toString() + "u onLoadFinish");
         }
-        filterCursor=data;
+        filterCursor = data;
 
-        mAdapter.setFilterCursorAndFilterString(filterCursor,mCurrentFilter);
+        mAdapter.setFilterCursorAndFilterString(filterCursor, mCurrentFilter);
 
-        nbOfFilteredItems.setText(((Integer)data.getCount()).toString()+" "+getString(R.string.foundContacts));
+        nbOfFilteredItems.setText(((Integer) data.getCount()).toString() + " " + getString(R.string.foundContacts));
     }
 
 
-
-
     @Override
-    public void viewHolderClicked(View v,int position) {
+    public void viewHolderClicked(View v, int position) {
 
-       // Toast.makeText(getActivity(),"cliced item nb "+((Integer)position).toString(),Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(),"cliced item nb "+((Integer)position).toString(),Toast.LENGTH_SHORT).show();
 
         if (filterCursor != null && filterCursor.getCount() != 0) {
             if (filterCursor.moveToPosition(position)) {
 
-                int contactId=filterCursor.getInt(CURSOR_COLUMN_ID);
-                String contactLookupKey=filterCursor.getString(CURSOR_COLUMN_LOOKUP);
+                int contactId = filterCursor.getInt(CURSOR_COLUMN_ID);
+                String contactLookupKey = filterCursor.getString(CURSOR_COLUMN_LOOKUP);
                 String name = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
-                mListener.onContactsFragmentInteraction(contactId,contactLookupKey,name);
+                mListener.onContactsFragmentInteraction(contactId, contactLookupKey, name);
 
 
             }
@@ -212,19 +236,39 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         mCurrentFilter = newFilter;
 
 
-        Log.v(DEBUG,mCurrentFilter+" =mCurrentFilter");
+        Log.v(DEBUG, mCurrentFilter + " =mCurrentFilter");
         getLoaderManager().restartLoader(0, null, this);
         return true;
 
     }
 
+    @Override
+    public void onViewHolderSwiped(int adapterPosition) {
+
+        if (checkPhoneCallPermission()) {
+
+            // ako imas dozvolu pozovi telefonski broj iz prosledjene adapterPosition
+
+            Intent intentToCall = new Intent(Intent.ACTION_CALL);
+
+            String telefon = veriTelTelefon + chosenPhoneNumber + "#";
+            Log.v(DEBUG, "on swipe and has permission : " + telefon);
+            intentToCall.setData(Uri.parse(telefon));
+            Toast.makeText(getActivity(), "intent to call" + telefon, Toast.LENGTH_SHORT).show();
+            startActivity(intentToCall);
+
+        }
+
+
+    }
+
+
     // interfejs prema Activity koja ga sadrzi
     public interface OnContactsFragmentInteractionListener {
         // šaljem ka Mainacitivy informaciju na osnovu koje će otvoriti Detail fragment
         // ne znam još šta ću poslati , koji tip podatka
-        void onContactsFragmentInteraction(int id, String lookup,String name);
+        void onContactsFragmentInteraction(int id, String lookup, String name);
     }
-
 
 
     @Override
@@ -232,8 +276,55 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         // This is called when the last Cursor provided to onLoadFinished()
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
-        mAdapter.setFilterCursorAndFilterString(null,null);
+        mAdapter.setFilterCursorAndFilterString(null, null);
     }
 
+
+    private boolean checkPhoneCallPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)) {
+            Snackbar.make(getActivity().findViewById(R.id.containerContactsList), R.string.permission_rationale_phone_call, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+
+
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+                        }
+                    }).show();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_PHONE_CALL) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.v(DEBUG, "permission call phone callback premission");
+                //String normilizedNumber = normilizeNumber("phoneNumber0");
+                Intent intentToCall = new Intent(Intent.ACTION_CALL);
+
+                String telefon = veriTelTelefon + chosenPhoneNumber + "#";
+                Log.v(DEBUG, "on rq per result and has permission : " + telefon);
+                intentToCall.setData(Uri.parse(telefon));
+                Toast.makeText(getActivity(), "intent to call" + telefon, Toast.LENGTH_SHORT).show();
+                startActivity(intentToCall);
+            }
+        } else {
+                Toast.makeText(getActivity(), "permission not granted", Toast.LENGTH_SHORT).show();
+                Log.v(DEBUG, "nema dozvolu za poziv");
+            }
+
+
+        }
 
 }

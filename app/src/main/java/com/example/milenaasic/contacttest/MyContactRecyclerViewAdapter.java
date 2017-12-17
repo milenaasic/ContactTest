@@ -1,6 +1,10 @@
 package com.example.milenaasic.contacttest;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.ContentUris;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -9,7 +13,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -33,6 +41,7 @@ import com.bumptech.glide.request.target.Target;
 public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContactRecyclerViewAdapter.ViewHolder> {
 
     private static final String LOG="MyConttRecViewAdapter";
+
 
     private static OnViewHolderClicked mViewHolderClicked;
     private Cursor filterCursor;
@@ -75,7 +84,6 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
         public void viewHolderClicked(View v,int position);
     }
-
 
 
     @Override
@@ -222,17 +230,12 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     }
 
 
-
-
-
-
     @Override
     public int getItemCount() {
         if(filterCursor==null){
             return 0;
         }else return filterCursor.getCount();
     }
-
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -263,5 +266,12 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
             mViewHolderClicked.viewHolderClicked(v,position);
         }
+
+
+
+
+
     }
+
+
 }
