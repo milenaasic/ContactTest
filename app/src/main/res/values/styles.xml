@@ -16,17 +16,24 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
-    <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+
     </style>
 
 
     <style name="SingleActicityTheme" parent="AppTheme">
         <!-- Customize your theme here. -->
 
-
     </style>
 
+    <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- Customize your theme here. -->
+    </style>
 
+    <style name="ToolbarStylePopUp" parent="ThemeOverlay.AppCompat.Light">
+        <!-- Customize your theme here. -->
+    </style>
 
 
 

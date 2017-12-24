@@ -23,16 +23,24 @@
 
         </FrameLayout>
 
+        <ImageView
+            android:id="@+id/status_bar_background_main"
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/single_contact_constrain_layout"
+            app:srcCompat="@color/colorPrimaryDark" />
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/mySingleToolbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-
             app:layout_constraintTop_toBottomOf="@+id/status_bar_background_main" />
 
 

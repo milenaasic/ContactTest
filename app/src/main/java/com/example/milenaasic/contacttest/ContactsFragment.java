@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Canvas;
@@ -24,6 +25,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -40,13 +42,14 @@ import static android.support.v7.widget.helper.ItemTouchHelper.*;
 
 
 public class ContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        MyContactRecyclerViewAdapter.OnViewHolderClicked,SearchView.OnQueryTextListener, SwipeController.ViewHolderSwipedListener {
+        MyContactRecyclerViewAdapter.OnViewHolderClicked,SearchView.OnQueryTextListener, SwipeController.ViewHolderSwipedListener,
+        SharedPreferences.OnSharedPreferenceChangeListener  {
 
     private static final String DEBUG = "ContactsFragment";
 
     private static final int REQUEST_PHONE_CALL = 10;
-    String veriTelTelefon = "tel:011430077,";
-    String chosenPhoneNumber = "+3813240809";
+    String veriTelTelefon;
+    String chosenPhoneNumber="0113240809";
     // interfejs prema Activity koja ga sadrzi
     private static OnContactsFragmentInteractionListener mListener;
 
@@ -64,7 +67,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     private static final int LOADER_ID = 10;
 
     //konstante za pretragu ContactsProvidera koja se radi preko Loader-a
-    private static final String[] PROJECTION = {ContactsContract.Contacts._ID,
+    private static final String[] PROJECTION = {
+            ContactsContract.Contacts._ID,
             ContactsContract.Contacts.LOOKUP_KEY,
             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
             ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
@@ -95,6 +99,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setUpPreferences();
+
     }
 
     @Override
@@ -113,6 +119,18 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         Log.v(DEBUG, "onCreateView");
         return rootView;
     }
+
+
+
+    private void setUpPreferences() {
+
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        veriTelTelefon=sharedPreferences.getString( "list_preference_phones", "greska");
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+
 
 
     @Override
@@ -150,6 +168,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         super.onDetach();
         mListener = null;
         mAdapter.setFilterCursorAndFilterString(null, null);
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
 
     }
 
@@ -243,23 +262,58 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onViewHolderSwiped(int adapterPosition) {
+    public void onViewHolderSwiped(RecyclerView.ViewHolder viewHolder,int adapterPosition) {
+
+        if(filterCursor.moveToPosition(adapterPosition)) {
+            String swipeContactId = filterCursor.getString(CURSOR_COLUMN_ID);
+            Cursor c = getActivity().getContentResolver().query(ContactsContract.Data.CONTENT_URI,
+                    new String[]{ContactsContract.Data._ID, ContactsContract.CommonDataKinds.Phone.NUMBER},
+                    ContactsContract.Data.CONTACT_ID + "=?" + " AND "
+                            + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "'",
+                    new String[]{String.valueOf(swipeContactId)}, null);
+
+            try{
+                if(c != null && c.moveToFirst() && !c.isNull(1)) {
+                    chosenPhoneNumber=c.getString(1);
+                    Log.v(DEBUG, "telefon posel swipe"+chosenPhoneNumber);
+                }
+            }finally {
+                if (c!=null)c.close();
+
+            }
+
+        }
 
         if (checkPhoneCallPermission()) {
 
             // ako imas dozvolu pozovi telefonski broj iz prosledjene adapterPosition
 
-            Intent intentToCall = new Intent(Intent.ACTION_CALL);
+            if(chosenPhoneNumber!=null) {
 
-            String telefon = veriTelTelefon + chosenPhoneNumber + "#";
-            Log.v(DEBUG, "on swipe and has permission : " + telefon);
-            intentToCall.setData(Uri.parse(telefon));
-            Toast.makeText(getActivity(), "intent to call" + telefon, Toast.LENGTH_SHORT).show();
-            startActivity(intentToCall);
+                Intent intentToCall = new Intent(Intent.ACTION_CALL);
+                String telefon = veriTelTelefon + chosenPhoneNumber + "#";
+                Log.v(DEBUG, "on swipe and has permission : " + telefon);
+                intentToCall.setData(Uri.parse(telefon));
+                if (intentToCall.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intentToCall);
+                }else{
+                    Toast.makeText(getActivity(),getString(R.string.toast_unable_to_resolve_activity),Toast.LENGTH_SHORT).show();
+                }
+            }
+
 
         }
 
+        mAdapter.notifyItemChanged(adapterPosition);
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(getString(R.string.list_preference_phones_key))){
+
+            veriTelTelefon=sharedPreferences.getString(key,"greska");
+        }
     }
 
 
@@ -310,14 +364,20 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         if (requestCode == REQUEST_PHONE_CALL) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.v(DEBUG, "permission call phone callback premission");
-                //String normilizedNumber = normilizeNumber("phoneNumber0");
+
                 Intent intentToCall = new Intent(Intent.ACTION_CALL);
 
                 String telefon = veriTelTelefon + chosenPhoneNumber + "#";
                 Log.v(DEBUG, "on rq per result and has permission : " + telefon);
+
                 intentToCall.setData(Uri.parse(telefon));
-                Toast.makeText(getActivity(), "intent to call" + telefon, Toast.LENGTH_SHORT).show();
-                startActivity(intentToCall);
+
+                if (intentToCall.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intentToCall);
+                }else{
+                    Toast.makeText(getActivity(),getString(R.string.toast_unable_to_resolve_activity),Toast.LENGTH_SHORT).show();
+                }
+
             }
         } else {
                 Toast.makeText(getActivity(), "permission not granted", Toast.LENGTH_SHORT).show();

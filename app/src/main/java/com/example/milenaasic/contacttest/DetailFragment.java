@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -25,12 +26,14 @@ import android.support.v4.content.Loader;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -70,6 +73,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static String SELECTION_PHONES= ContactsContract.Data.LOOKUP_KEY+"=?" +
             " AND " + ContactsContract.Data.MIMETYPE + " = " +
             "'" + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "'";
+
     private String [] phoneSelectionArguments={""};
 
 
@@ -129,6 +133,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         TextView displayName =rootView.findViewById(R.id.mytextView);
         mMyConstraintLayout=rootView.findViewById(R.id.myConstraintLayout);
         mPhonesRecyclerView=rootView.findViewById(R.id.phonesRecyclerView);
+        TextView displayNameTop=rootView.findViewById(R.id.displayNameTop);
 
 
 
@@ -136,7 +141,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         ImageView mimageView_ThumbPhoto_outer=rootView.findViewById(R.id.imageView_ThumbPhoto_outer);
         ImageView mimageView_ThumbPhoto_inner=rootView.findViewById(R.id.imageView_ThumbPhoto_Inner);
 
-        ImageView mStatusBarBackground=getActivity().findViewById(R.id.status_bar_background);
+        ImageView mStatusBarBackground=getActivity().findViewById(R.id.status_bar_background_main);
+        Toolbar myToolbar=getActivity().findViewById(R.id.mySingleToolbar);
+
+        Configuration config = getResources().getConfiguration();
 
         // Uri kontakta za koji se otvara DetailFragment
         Uri contactUri= ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,contactId);
@@ -149,34 +157,73 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 new String[] {ContactsContract.Contacts.PHOTO_URI},
                 null, null, null);
 
-        if(photocursor!=null && photocursor.moveToFirst()&& !photocursor.isNull(0)){
+        try {
+            if (photocursor != null && photocursor.moveToFirst() && !photocursor.isNull(0)) {
 
-                    GlideApp.with(this)
+
+                GlideApp.with(this)
                         .load(fullSizePhoto)
                         .error(R.color.colorPrimary)
                         .into(mFullPictureImage);
 
-                    mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
-                    mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
-                    Log.v(DEBUG,"full size photo loaded");
-                    int greyTransparent=getResources().getColor(R.color.colorPrimaryTransparent50);
-                    displayName.setBackgroundColor(greyTransparent);
-                    mStatusBarBackground.setBackgroundColor(getResources().getColor(R.color.colorPrimaryTransparent50));
+                mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
+                mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
+                Log.v(DEBUG, "full size photo loaded");
 
-        }else{
+                if (config.orientation==Configuration.ORIENTATION_PORTRAIT){
+                    myToolbar.setBackgroundColor(Color.TRANSPARENT);
+                    displayName.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDarkTransparent50));
+                }
 
-            displayName.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            //displayName.setTextColor(Color.BLACK);
-            mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
-            mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
-            mStatusBarBackground.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
-            Log.v(DEBUG,"set backround color");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && config.orientation==Configuration.ORIENTATION_PORTRAIT){
+                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDarkTransparent50));
+                    //myToolbar.setBackgroundColor(Color.TRANSPARENT);
+                }
 
+                if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT_WATCH)&&
+                        config.orientation==Configuration.ORIENTATION_PORTRAIT){
+                   View mStatusBarBackround=rootView.findViewById(R.id.status_bar_background_main);
+                   mStatusBarBackground.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDarkTransparent50));
+                   // myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+                }
+
+                    displayName.setText(contactName);
+
+
+            } else {
+
+
+                mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
+                mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
+
+
+                    if(config.orientation==Configuration.ORIENTATION_LANDSCAPE) {
+                        myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                        displayName.setVisibility(View.GONE);
+                        //displayNameTop.setBackgroundColor(Color.TRANSPARENT);
+                        displayNameTop.setVisibility(View.VISIBLE);
+                        displayNameTop.setText(contactName);
+
+                    }else{
+
+                        displayName.setText(contactName);
+
+
+                    }
+
+
+                }
+
+
+                 Log.v(DEBUG, "set backround color");
+
+
+        }finally {
+            if (photocursor!=null)
+                photocursor.close();
         }
-
-        displayName.setText(contactName);
-
 
         return rootView;
     }
@@ -277,7 +324,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             Log.v(DEBUG, "veritel telefon : " + telefon);
             intentToCall.setData(Uri.parse(telefon));
 
-            startActivity(intentToCall);
+            if (intentToCall.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intentToCall);
+            }else{
+                Toast.makeText(getActivity(),getString(R.string.toast_unable_to_resolve_activity),Toast.LENGTH_SHORT).show();
+            }
+
+
 
 
         }

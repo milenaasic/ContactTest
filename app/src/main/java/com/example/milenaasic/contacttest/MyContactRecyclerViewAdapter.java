@@ -30,6 +30,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.annotation.GlideModule;
@@ -80,6 +81,8 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
         }
 
 
+
+
     public interface OnViewHolderClicked{
 
         public void viewHolderClicked(View v,int position);
@@ -112,7 +115,14 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 boolean hasThumbnail=filterCursor.isNull(CURSOR_PHOTO_THUMBNAIL_URI);
                 boolean hasPhoto=filterCursor.isNull(CURSOR_PHOTO_URI);
 
-                String newName = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
+                String newNameOriginal = filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
+                String newName;
+                int maxLength=37;
+                if (newNameOriginal.length()>maxLength){
+                    newName=newNameOriginal.substring(0,maxLength-4)+"...";
+                }else{
+                    newName=newNameOriginal;
+                }
 
                 Log.v(LOG,"ima thumbnail :"+((Boolean)hasThumbnail).toString()+" , posizija "+position);
                 Log.v(LOG,"ima sliku :"+((Boolean)hasPhoto).toString()+" , posizija "+position);

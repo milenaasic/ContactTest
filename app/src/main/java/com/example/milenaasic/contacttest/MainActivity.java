@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -36,11 +37,17 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.mytoolbar);
-
+        Toolbar myToolbar =findViewById(R.id.mytoolbar);
         setSupportActionBar(myToolbar);
+
         mCoordinatorLayout=findViewById(R.id.containerContactsList);
 
+
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT_WATCH) {
+            ImageView mStatusBarBackground=findViewById(R.id.status_bar_background_main);
+            mStatusBarBackground.setMinimumHeight(getStatusBarHeight());
+            Log.v(LOG,getStatusBarHeight()+"visina status bara");
+        }
 
         // ako imas permission ucitaj fragment
         if(savedInstanceState==null){
@@ -51,10 +58,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
 
         }
 
-
-
     }
-
 
 
     @Override
@@ -129,4 +133,21 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
 
         }
     }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+            Log.v(LOG, "visina status barapixelsize " + result);
+
+        }
+
+        Log.v(LOG,"result"+(result));
+        return result;
+    }
+
+
 }

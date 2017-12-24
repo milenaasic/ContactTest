@@ -1,8 +1,10 @@
 package com.example.milenaasic.contacttest;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,8 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 public class SingleContactActivity extends AppCompatActivity implements DetailFragment.OnDetailFragmentInteractionListener {
 
@@ -20,35 +22,61 @@ public class SingleContactActivity extends AppCompatActivity implements DetailFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_contact);
+                setContentView(R.layout.activity_single_contact);
         //ActionBar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.mySingleToolbar);
         myToolbar.setTitle(" ");
         setSupportActionBar(myToolbar);
         ActionBar actionBar = this.getSupportActionBar();
-
+        Log.v(DEBUG,"api on cerate");
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         }
 
-        //lazni background za statusBar
-
-        ImageView mStatusBarBackground=findViewById(R.id.status_bar_background);
-        mStatusBarBackground.setMinimumHeight(getStatusBarHeight());
-       // mStatusBarBackground.setBackgroundColor(Color.GREEN);
-
-        //systembar ide iza slike
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
+        Configuration config = getResources().getConfiguration();
+        FrameLayout mDetailFragmentContainer=findViewById(R.id.detailFragmentContainer);
 
 
-        /*int height = getAppBarHeight()+getStatusBarHeight();
-        myToolbar.setMinimumHeight(height);
-        myToolbar.setPadding(0,getStatusBarHeight()/2,0,0);*/
+
+        // za Api>=21 setujem flag da sadrzaj ide iza status bara
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(uiOptions);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            Log.v(DEBUG,"api 21");
+
+            if(config.orientation==Configuration.ORIENTATION_PORTRAIT) {
+                myToolbar.setPadding(0,getStatusBarHeight(),0,0);
+
+            }else{
+                myToolbar.setPadding(0,getStatusBarHeight(),0,0);
+                mDetailFragmentContainer.setPadding(0,getStatusBarHeight()+getAppBarHeight(),0,0);
+                Log.v(DEBUG,"status + app hajt"+getAppBarHeight()+getStatusBarHeight());
+            }
+
+        }
 
 
+        // za Api=19 i 20
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT_WATCH) {
+
+            ImageView mStatusBarBackground = findViewById(R.id.status_bar_background_main);
+             mStatusBarBackground.setMinimumHeight(getStatusBarHeight());
+
+             if(config.orientation==Configuration.ORIENTATION_LANDSCAPE){
+
+                 mDetailFragmentContainer.setPadding(0,getStatusBarHeight()+getAppBarHeight(),0,0);
+             }
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+
+            if(config.orientation==Configuration.ORIENTATION_LANDSCAPE){
+                mDetailFragmentContainer.setPadding(0,getAppBarHeight(),0,0);
+            }
+        }
 
 
         if (savedInstanceState == null) {
@@ -81,7 +109,7 @@ public class SingleContactActivity extends AppCompatActivity implements DetailFr
 
     }
 
-    public int getStatusBarHeight() {
+    private int getStatusBarHeight() {
         int result = 0;
 
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -96,7 +124,7 @@ public class SingleContactActivity extends AppCompatActivity implements DetailFr
         return result;
     }
 
-    public int getAppBarHeight() {
+    private int getAppBarHeight() {
 
         int actionBarHeight = 0;
         TypedValue tv = new TypedValue();
