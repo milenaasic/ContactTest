@@ -5,10 +5,13 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
@@ -19,8 +22,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.example.milenaasic.contacttest.R.mipmap.ic_launcher_round;
 
 public class MainActivity extends AppCompatActivity implements ContactsFragment.OnContactsFragmentInteractionListener {
 
@@ -39,6 +44,20 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         setContentView(R.layout.activity_main);
         Toolbar myToolbar =findViewById(R.id.mytoolbar);
         setSupportActionBar(myToolbar);
+
+        ActionBar actionBar=getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        myToolbar.setBackgroundResource(R.drawable.veritel_background);
+        myToolbar.setNavigationIcon(null);
+        //myToolbar.setPadding(0,0,0,0);
+
+
+        /*actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(true);
+
+        actionBar.setLogo(R.mipmap.ic_launcher_round);
+        actionBar.setDisplayUseLogoEnabled(true);*/
+
 
         mCoordinatorLayout=findViewById(R.id.containerContactsList);
 
@@ -65,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater=getMenuInflater();
         menuInflater.inflate(R.menu.main_activity_app_bar,menu);
+
+
+        Log.v(LOG,menu.size()+"broj elemenata u meniju");
         return true;
     }
 

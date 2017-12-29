@@ -24,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/colorPrimary"
+            app:srcCompat="@color/primaryLightColor"
             tools:foregroundGravity="bottom"
             tools:scaleType="centerCrop" />
 
@@ -52,34 +52,6 @@
             app:layout_constraintHorizontal_bias="0.166"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView_ThumbPhoto_outer"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="16dp"
-            android:src="@color/colorAccent"
-            app:layout_constraintBottom_toTopOf="@+id/mytextView"
-            app:layout_constraintEnd_toEndOf="@+id/fullPictureImage"
-            app:layout_constraintStart_toStartOf="@+id/fullPictureImage"
-            app:layout_constraintTop_toTopOf="@+id/fullPictureImage"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <ImageView
-            android:id="@+id/imageView_ThumbPhoto_Inner"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:scaleType="fitCenter"
-            android:src="@color/primaryLightColor"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView_ThumbPhoto_outer"
-            app:layout_constraintEnd_toEndOf="@+id/imageView_ThumbPhoto_outer"
-            app:layout_constraintStart_toStartOf="@+id/imageView_ThumbPhoto_outer"
-            app:layout_constraintTop_toTopOf="@+id/imageView_ThumbPhoto_outer" />
-
         <TextView
             android:id="@+id/displayNameTop"
             android:layout_width="0dp"
@@ -106,7 +78,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="0dp"
-        android:layout_weight="2" />
+        android:layout_weight="2"
+        android:paddingTop="16dp" />
 
 
 </LinearLayout>

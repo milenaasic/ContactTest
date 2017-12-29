@@ -44,7 +44,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     private static final String LOG="MyConttRecViewAdapter";
 
 
-    private static OnViewHolderClicked mViewHolderClicked;
+    private OnViewHolderClicked mViewHolderClicked;
     private Cursor filterCursor;
     private String filterString;
 
@@ -248,7 +248,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView mItemImageView;
         public TextView mItemTextView;

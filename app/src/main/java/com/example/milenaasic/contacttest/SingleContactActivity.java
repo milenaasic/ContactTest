@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-public class SingleContactActivity extends AppCompatActivity implements DetailFragment.OnDetailFragmentInteractionListener {
+public class SingleContactActivity extends AppCompatActivity {
 
     public static final String DEBUG = "SinglePictureActivity";
 
@@ -104,10 +104,6 @@ public class SingleContactActivity extends AppCompatActivity implements DetailFr
 
     }
 
-    @Override
-    public void onDetailFragmentInteraction(Uri uri) {
-
-    }
 
     private int getStatusBarHeight() {
         int result = 0;

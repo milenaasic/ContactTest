@@ -29,6 +29,9 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,7 +45,7 @@ import static android.support.v7.widget.helper.ItemTouchHelper.*;
 
 
 public class ContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        MyContactRecyclerViewAdapter.OnViewHolderClicked,SearchView.OnQueryTextListener, SwipeController.ViewHolderSwipedListener,
+        MyContactRecyclerViewAdapter.OnViewHolderClicked,SearchView.OnQueryTextListener,SearchView.OnCloseListener, SwipeController.ViewHolderSwipedListener,
         SharedPreferences.OnSharedPreferenceChangeListener  {
 
     private static final String DEBUG = "ContactsFragment";
@@ -58,7 +61,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     MyContactRecyclerViewAdapter mAdapter;
     SwipeController swipeController;
     TextView nbOfFilteredItems;
-
+    SearchView searchViewAndroidActionBar;
     //SearchView mSearchView;
     private SearchView mSearchView;
     private String mCurrentFilter;
@@ -98,7 +101,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         setUpPreferences();
 
     }
@@ -109,10 +112,10 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_contact_list, container, false);
 
         mRecyclerView = rootView.findViewById(R.id.myRecylerView);
-        mSearchView = rootView.findViewById(R.id.mySearchView);
+        /*mSearchView = rootView.findViewById(R.id.mySearchView);
         mSearchView.setOnQueryTextListener(this);
-        mSearchView.setSubmitButtonEnabled(false);
-        mSearchView.clearFocus();
+        mSearchView.setSubmitButtonEnabled(false);*/
+
 
         nbOfFilteredItems = rootView.findViewById(R.id.nbFilteredItems);
 
@@ -170,6 +173,43 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         mAdapter.setFilterCursorAndFilterString(null, null);
         PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //searchViewAndroidActionBar.clearFocus();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_contacts_app_bar,menu);
+        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
+        searchViewAndroidActionBar = (SearchView) searchViewItem.getActionView();
+        searchViewAndroidActionBar.setIconifiedByDefault(false);
+        searchViewAndroidActionBar.clearFocus();
+        searchViewAndroidActionBar.setQueryHint("Search");
+        searchViewAndroidActionBar.setOnQueryTextListener(this);
+       // searchViewItem.expandActionView();
+        //searchViewAndroidActionBar.setPadding(0,0,0,0);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.app_bar_search){
+        return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -261,6 +301,17 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     }
 
+
+    @Override
+    public boolean onClose() {
+
+        searchViewAndroidActionBar.clearFocus();
+        return true;
+    }
+
+
+
+
     @Override
     public void onViewHolderSwiped(RecyclerView.ViewHolder viewHolder,int adapterPosition) {
 
@@ -315,6 +366,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
             veriTelTelefon=sharedPreferences.getString(key,"greska");
         }
     }
+
 
 
     // interfejs prema Activity koja ga sadrzi

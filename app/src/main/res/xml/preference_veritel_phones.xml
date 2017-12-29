@@ -6,7 +6,6 @@
         android:defaultValue="@string/pref_list_entry_value_0"
         android:entries="@array/veritel_phones_key"
         android:entryValues="@array/veritel_phones_values"
-        android:icon="@mipmap/ic_launcher_round"
         android:key="@string/list_preference_phones_key"
         android:title="VeriTel Number" />
 

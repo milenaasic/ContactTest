@@ -14,6 +14,8 @@
         android:id="@+id/mytoolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+
+        android:background="@color/primaryLightColor"
         android:theme="?attr/actionBarTheme" />
 
     <android.support.design.widget.CoordinatorLayout

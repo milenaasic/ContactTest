@@ -48,15 +48,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static final String ARG_PARAM2 = "lookup";
     private static final String ARG_PARAM3 = "name";
 
-    // TODO: Rename and change types of parameters
     private int contactId ;
     private String contactLookupKey;
     private String contactName;
+    private int maxNameLength=40;
 
-
-
-
-    private OnDetailFragmentInteractionListener mListener;
 
     //pretraga telefona na osnovu ID-a i LOOKUP_KEY-a
     private static final String[]PROJECTION_PHONES={
@@ -135,11 +131,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mPhonesRecyclerView=rootView.findViewById(R.id.phonesRecyclerView);
         TextView displayNameTop=rootView.findViewById(R.id.displayNameTop);
 
-
-
         ImageView mFullPictureImage=rootView.findViewById(R.id.fullPictureImage);
-        ImageView mimageView_ThumbPhoto_outer=rootView.findViewById(R.id.imageView_ThumbPhoto_outer);
-        ImageView mimageView_ThumbPhoto_inner=rootView.findViewById(R.id.imageView_ThumbPhoto_Inner);
 
         ImageView mStatusBarBackground=getActivity().findViewById(R.id.status_bar_background_main);
         Toolbar myToolbar=getActivity().findViewById(R.id.mySingleToolbar);
@@ -158,7 +150,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 null, null, null);
 
         try {
-            if (photocursor != null && photocursor.moveToFirst() && !photocursor.isNull(0)) {
+            if (photocursor != null && photocursor.moveToFirst() && !photocursor.isNull(CURSOR_PHONE_ID)) {
 
 
                 GlideApp.with(this)
@@ -166,8 +158,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         .error(R.color.colorPrimary)
                         .into(mFullPictureImage);
 
-                mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
-                mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
                 Log.v(DEBUG, "full size photo loaded");
 
                 if (config.orientation==Configuration.ORIENTATION_PORTRAIT){
@@ -189,30 +179,22 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
                 }
 
-                    displayName.setText(contactName);
+                    displayName.setText(trimContactName(contactName,maxNameLength));
 
 
             } else {
-
-
-                mimageView_ThumbPhoto_inner.setVisibility(View.GONE);
-                mimageView_ThumbPhoto_outer.setVisibility(View.GONE);
-
 
                     if(config.orientation==Configuration.ORIENTATION_LANDSCAPE) {
                         myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                         displayName.setVisibility(View.GONE);
                         //displayNameTop.setBackgroundColor(Color.TRANSPARENT);
                         displayNameTop.setVisibility(View.VISIBLE);
-                        displayNameTop.setText(contactName);
+                        displayNameTop.setText(trimContactName(contactName,maxNameLength));
 
                     }else{
-
-                        displayName.setText(contactName);
-
+                        displayName.setText(trimContactName(contactName,maxNameLength));
 
                     }
-
 
                 }
 
@@ -229,24 +211,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
 
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnDetailFragmentInteractionListener) {
-            mListener = (OnDetailFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnDetailFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onDestroy() {
+        super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -387,4 +357,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
 
+    private String trimContactName(String name,int maxLength){
+
+        if (name.length()>maxLength){
+            return name.substring(0,maxLength-4)+"...";
+        }else{
+            return name;
+        }
+
+
+    }
 }
