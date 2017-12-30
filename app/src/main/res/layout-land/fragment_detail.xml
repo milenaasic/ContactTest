@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.example.milenaasic.contacttest.DetailFragment">
+    tools:context="com.vertial.veritel.DetailFragment">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/myConstraintLayout"
