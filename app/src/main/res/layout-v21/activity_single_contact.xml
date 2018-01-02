@@ -28,7 +28,7 @@
             android:id="@+id/mySingleToolbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/veritel_background"
+            android:background="@android:color/transparent"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ToolbarStyle"
 
