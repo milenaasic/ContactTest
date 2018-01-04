@@ -69,7 +69,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/itemImageView"
             app:layout_constraintStart_toStartOf="@+id/firstLetterView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="@dimen/list_item_text_left_padding" />
 
         <ImageView
             android:id="@+id/itemImageView"
@@ -83,7 +84,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:cropToPadding="false" />
+            tools:cropToPadding="false"
+            android:layout_marginRight="@dimen/list_item_icon_left_padding" />
 
         <TextView
             android:id="@+id/letterInCircle"
@@ -91,7 +93,7 @@
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:text="A"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/letter_in_circle_size"
             app:layout_constraintBottom_toBottomOf="@+id/itemImageView"
             app:layout_constraintEnd_toEndOf="@+id/itemImageView"

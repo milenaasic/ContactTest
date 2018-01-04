@@ -25,6 +25,7 @@
 
         <activity
             android:name="com.vertial.veritel.SingleContactActivity"
+            android:launchMode="singleTop"
             android:theme="@style/SingleActicityTheme"
             android:parentActivityName="com.vertial.veritel.MainActivity" />
 

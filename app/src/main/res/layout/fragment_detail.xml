@@ -36,7 +36,7 @@
             android:layout_margin="0dp"
             android:gravity="center_vertical"
             android:minHeight="?attr/actionBarSize"
-            android:paddingBottom="0dp"
+            android:paddingBottom="8dp"
             android:paddingEnd="32dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"

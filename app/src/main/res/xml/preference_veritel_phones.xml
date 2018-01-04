@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ListPreference
-        android:defaultValue="@string/pref_list_default_value"
+        android:defaultValue="@string/pref_list_entry_value_0"
         android:entries="@array/veritel_phones_key"
         android:entryValues="@array/veritel_phones_values"
         android:key="@string/list_preference_phones_key"
-        android:title="VeriTel Number" />
+        android:title="@string/veritel_settings_name" />
 
 </PreferenceScreen>
