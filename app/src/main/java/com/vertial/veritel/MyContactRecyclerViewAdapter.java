@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -114,11 +115,25 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 options.circleCrop();
 
                 if(!hasThumbnail){
+
+                    // ako je API>=21 ucitaj drawable i iseci krug
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                         GlideApp.with((Fragment) mViewHolderClicked)
-                        .load(photoThumbUri)
-                        .error(R.drawable.veritel_bacground_manji_opseg)
-                        .circleCrop()
-                        .into(holder.mItemImageView);
+                                .load(photoThumbUri)
+                                .error(R.drawable.veritel_bacground_manji_opseg)
+                                .circleCrop()
+                                .into(holder.mItemImageView);
+
+                    }else{
+                        //nemoj da seces krug neka bude kvadrat
+                        GlideApp.with((Fragment) mViewHolderClicked)
+                                .load(photoThumbUri)
+                                .error(R.color.colorBetweenPrimaryAndPrimaryLight3)
+                                .into(holder.mItemImageView);
+
+                    }
+
+
 
                     holder.mletterInCircle.setText("");
 
@@ -126,20 +141,45 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
                 }else {
                     if (!hasPhoto) {
-                        GlideApp.with((Fragment) mViewHolderClicked)
-                                .load(photoUri)
-                                .error(R.drawable.veritel_bacground_manji_opseg)
-                                .circleCrop()
-                                .into(holder.mItemImageView);
 
-                            holder.mletterInCircle.setText("");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+
+                            GlideApp.with((Fragment) mViewHolderClicked)
+                                    .load(photoUri)
+                                    .error(R.drawable.veritel_bacground_manji_opseg)
+                                    .circleCrop()
+                                    .into(holder.mItemImageView);
+
+                        }else {//nemoj da seces krug neka bude kvadrat
+                            GlideApp.with((Fragment) mViewHolderClicked)
+                                    .load(photoUri)
+                                    .error(R.color.colorBetweenPrimaryAndPrimaryLight3)
+                                    .into(holder.mItemImageView);
+                        }
+
+
+                        holder.mletterInCircle.setText("");
                         Log.v(LOG,"big photo loaded");
+
                     } else {
-                        GlideApp.with((Fragment) mViewHolderClicked)
-                                .load(R.drawable.veritel_bacground_manji_opseg)
-                                .error(R.drawable.veritel_bacground_manji_opseg)
-                                .circleCrop()
-                                .into(holder.mItemImageView);
+
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+                            GlideApp.with((Fragment) mViewHolderClicked)
+                                    .load(R.drawable.veritel_background_cyan_only)
+                                    .error(R.color.colorPrimary)
+                                    .circleCrop()
+                                    .into(holder.mItemImageView);
+
+                        }else {
+
+                            GlideApp.with((Fragment) mViewHolderClicked)
+                                    .load(R.drawable.veritel_bacground_manji_opseg)
+                                    .error(R.color.colorBetweenPrimaryAndPrimaryLight3)
+                                    .into(holder.mItemImageView);
+
+                        }
+
                         Log.v(LOG,"krug sa slovom");
                         char firstLetter=newName.trim().charAt(0);
                         char[] data={firstLetter};

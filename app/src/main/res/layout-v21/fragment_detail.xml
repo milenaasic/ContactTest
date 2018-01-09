@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/detailFragmentLayout"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     tools:context="com.vertial.veritel.DetailFragment">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/myConstraintLayout"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="2"
         android:foregroundGravity="bottom">
 
@@ -27,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/primaryLightColor"
+            app:srcCompat="@color/colorPrimary"
             tools:foregroundGravity="bottom"
             tools:scaleType="centerCrop" />
 
@@ -37,7 +35,6 @@
             android:layout_height="wrap_content"
 
             android:layout_margin="0dp"
-            android:background="@color/colorDarkGreyTransparent20"
             android:gravity="center_vertical"
             android:minHeight="?attr/actionBarSize"
             android:paddingBottom="8dp"
@@ -60,13 +57,12 @@
             android:id="@+id/displayNameTop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
             android:paddingEnd="32dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
             android:paddingStart="32dp"
             android:paddingTop="16dp"
-            android:text="@string/app_name"
+            android:text="@string/textview"
             android:textColor="@color/primaryTextColor"
             android:textColorHighlight="@color/colorAccent"
             android:textSize="24sp"
@@ -80,12 +76,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/phonesRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="0dp"
         android:layout_weight="2"
         android:paddingTop="16dp" />
 
 
 </LinearLayout>
-

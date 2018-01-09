@@ -23,5 +23,7 @@
     <dimen name="list_capital_letter_size">36sp</dimen>
     <dimen name="letter_in_circle_size">20sp</dimen>
 
+    //dial keypad
+    <dimen name="keypad_number">28sp</dimen>
 
 </resources>

@@ -50,7 +50,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     private static final int REQUEST_PHONE_CALL = 10;
     String veriTelTelefon;
-    String chosenPhoneNumber="0113240809,";
+    String chosenPhoneNumber="";
     // interfejs prema Activity koja ga sadrzi
     private OnContactsFragmentInteractionListener mListener;
 
@@ -380,9 +380,11 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.v(DEBUG,"veriTelTelefon id on Sharedpreferen pre if ");
         if(key.equals(getString(R.string.list_preference_phones_key))){
 
-            veriTelTelefon=sharedPreferences.getString(key,"greska");
+            veriTelTelefon=sharedPreferences.getString(key,getResources().getString(R.string.pref_list_default_value));
+            Log.v(DEBUG,"veriTelTelefon id on Sharedpreferen "+veriTelTelefon);
         }
     }
 

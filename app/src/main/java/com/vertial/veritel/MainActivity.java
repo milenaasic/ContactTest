@@ -33,10 +33,13 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
 
     private static final String LOG="MainActivity";
     private static final int REQUEST_READ_CONTACTS=100;
+    private static final int REQUEST_PHONE_CALL=110;
+
     View mCoordinatorLayout;
     ActionBar actionBar;
     SearchView searchViewActionBar;
     private MenuItem mActionSettings;
+    private MenuItem mACtionDirectDial;
 
     public static final String CONTACT_ID="contactID";
     public static final String CONTACT_LOOKUP_KEY="contactLookup";
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
 
         actionBar=getSupportActionBar();
 
-        myToolbar.setBackgroundResource(R.drawable.veritel_background);
+       // myToolbar.setBackgroundResource(R.drawable.veritel_background);
 
         mCoordinatorLayout=findViewById(R.id.containerContactsList);
 
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         MenuInflater menuInflater=getMenuInflater();
         menuInflater.inflate(R.menu.main_activity_app_bar,menu);
        mActionSettings= menu.findItem(R.id.action_settings);
+       mACtionDirectDial=menu.findItem(R.id.action_direct_dial);
         Log.v(LOG,menu.size()+"broj elemenata u meniju");
         return true;
     }
@@ -89,22 +93,32 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
         int id=menuItem.getItemId();
-        if(id==R.id.action_settings){
-            Intent startSettingsActivity=new Intent(this,SettingsActivity.class);
-            startActivity(startSettingsActivity);
-            return true;
+        switch (id) {
+            case  R.id.action_settings:{
 
+                Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
+                return true;
+
+            }
+
+            case R.id.action_direct_dial:{
+
+                if(checkPhoneCallPermission()){
+
+                Intent startsDialUpActivity = new Intent(this, DirectDialActivity.class);
+                startActivity(startsDialUpActivity);
+                return true;
+
+                }
+
+            }
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(menuItem);
         }
-        /*if(id==android.R.id.home){
 
-            searchViewActionBar.setQuery("",true);
-
-            Log.v(LOG,"home as up clickde");
-
-            return true;
-
-        }*/
-        return true;
 
     }
 
@@ -160,6 +174,20 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
             }
 
         }
+
+        if (requestCode == REQUEST_PHONE_CALL) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.v(LOG, "permission phone call for dial pad callback premission");
+                Intent startSDialUpActivity = new Intent(this, DirectDialActivity.class);
+                startActivity(startSDialUpActivity);
+
+            } else {
+
+            }
+
+        }
+
+
     }
 
     private int getStatusBarHeight() {
@@ -184,12 +212,10 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
        Log.v(LOG,"u action expand");
         searchViewActionBar = (SearchView) item.getActionView();
         searchViewActionBar.setIconified(false);
-        mActionSettings.setVisible(false);
-        //Resources res=getContext().getResources();
 
-       // int mHintIcon=getResources().getIdentifier("android:id/search_mag_icon",null,null);
-        /*ImageView mHintIconImage = (ImageView) searchViewActionBar.findViewById(mHintIcon);
-        mHintIconImage.setImageResource(R.drawable.icons8_phone);*/
+        mActionSettings.setVisible(false);
+        mACtionDirectDial.setVisible(false);
+
 
 
 
@@ -203,14 +229,34 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         searchViewActionBar.setQuery("",true);
         searchViewActionBar.clearFocus();
         mActionSettings.setVisible(true);
-        //ovde setujem fragment mCurrentFilterString na prazno
-        /*if(searchViewActionBar.isIconified()){
-            Log.v(LOG,"isIcon");
-        }*/
+        mACtionDirectDial.setVisible(true);
+
 
             return true;
 
     }
 
+    private boolean checkPhoneCallPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)) {
+            Snackbar.make(mCoordinatorLayout, R.string.permission_rationale_phone_call, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
 
+
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+                        }
+                    }).show();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+        }
+        return false;
+    }
 }

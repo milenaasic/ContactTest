@@ -8,4 +8,12 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/action_direct_dial"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        android:orderInCategory="50"
+        android:title="@string/dial_pad"
+        app:showAsAction="always" />
 </menu>

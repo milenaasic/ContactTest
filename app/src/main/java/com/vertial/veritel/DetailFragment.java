@@ -113,8 +113,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private void setUpPreferences() {
 
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
-        veriTelTelefon=sharedPreferences.getString( "list_preference_phones", getResources().getString(R.string.pref_list_default_value));
-        Log.v(DEBUG,"veritelTelefon "+veriTelTelefon);
+        veriTelTelefon=sharedPreferences.getString( String.valueOf(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
+        Log.v(DEBUG,"veritelTelefon u set up pref "+veriTelTelefon);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -265,19 +265,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
 
 
-
-    /*private String normilizeNumber(String phoneNumber0) {
-       String numberToCall=phoneNumber0.getText().toString();
-        Log.v(DEBUG,numberToCall);
-        return numberToCall+"#";}*/
-
-
     // preferences ucitavanje
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.v(DEBUG,"veritelTelefon u on pref changed pre if "+veriTelTelefon);
         if(key.equals(getString(R.string.list_preference_phones_key))){
 
             veriTelTelefon=sharedPreferences.getString(key,getResources().getString(R.string.pref_list_default_value));
+            Log.v(DEBUG,"veritelTelefon u on pref changed posle if "+veriTelTelefon);
         }
 
     }

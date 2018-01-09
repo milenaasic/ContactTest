@@ -12,29 +12,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name="com.vertial.veritel.MainActivity"
+            android:name=".MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.vertial.veritel.SingleContactActivity"
+            android:name=".SingleContactActivity"
             android:launchMode="singleTop"
-            android:theme="@style/SingleActicityTheme"
-            android:parentActivityName="com.vertial.veritel.MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/SingleActicityTheme" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".MainActivity" />
+
 
         <activity
-            android:name="com.vertial.veritel.SettingsActivity"
-            android:label="Settings"
-            android:parentActivityName="com.vertial.veritel.MainActivity" />
-
-
+            android:name=".DirectDialActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

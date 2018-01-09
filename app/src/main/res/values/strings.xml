@@ -11,17 +11,21 @@
 
 
     // preference strings
-    <string name="pref_list_default_value">tel:0114300777,</string>
+    <string name="pref_list_default_value">tel:+381114300777,</string>
     <string name="list_preference_phones_key">list_preference_phones</string>
     <string name="pref_list_entry_key_0">011 43 00 777</string>
     <string name="pref_list_entry_key_1">011 42 40 999</string>
-    <string name="pref_list_entry_value_0">tel:0114300777,</string>
-    <string name="pref_list_entry_value_1">tel:0114240999,</string>
+    <string name="pref_list_entry_value_0">tel:+381114300777,</string>
+    <string name="pref_list_entry_value_1">tel:+381114240999,</string>
     <string name="swipe_message">Calling...</string>
 
     // toast strings
     <string name="toast_unable_to_resolve_activity">Unable to make a call.</string>
     <string name="textview">TextView</string>
     <string name="veritel_settings_name">VeriTel Number</string>
+    <string name="dial_pad">dial_pad</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
