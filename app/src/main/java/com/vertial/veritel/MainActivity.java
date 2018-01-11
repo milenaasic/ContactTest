@@ -217,8 +217,6 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         mACtionDirectDial.setVisible(false);
 
 
-
-
         return true;
     }
 
@@ -228,10 +226,9 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         Log.v(LOG,"u action colapse");
         searchViewActionBar.setQuery("",true);
         searchViewActionBar.clearFocus();
-        mActionSettings.setVisible(true);
+
         mACtionDirectDial.setVisible(true);
-
-
+        mActionSettings.setVisible(true);
             return true;
 
     }

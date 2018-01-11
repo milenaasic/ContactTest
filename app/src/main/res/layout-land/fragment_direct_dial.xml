@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5,31 +6,15 @@
     android:id="@+id/direct_dial_fragment_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="com.vertial.veritel.DirectDialFragment">
 
-    <EditText
-        android:id="@+id/editPhoneView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:backgroundTint="?attr/colorPrimary"
-        android:cursorVisible="false"
-        android:ems="10"
-        android:focusedByDefault="false"
-        android:gravity="center_vertical|center_horizontal|center"
-        android:hint="@string/enter_number"
-        android:inputType="phone"
-        android:maxLength="18"
-        android:maxLines="2"
-        android:singleLine="false"
-        android:textSize="@dimen/keypad_text" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/containerForDialer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <Button
             android:id="@+id/button1"
@@ -179,7 +164,7 @@
             android:id="@+id/buttonPlus"
             android:layout_width="117dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/avatar_item_heigh_and_width"
             android:text="+"
@@ -195,7 +180,7 @@
             android:id="@+id/button0"
             android:layout_width="117dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/avatar_item_heigh_and_width"
             android:text="0"
@@ -212,7 +197,7 @@
             android:id="@+id/buttonDelete"
             android:layout_width="118dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:background="?android:attr/selectableItemBackground"
             android:cropToPadding="true"
             android:minHeight="@dimen/avatar_item_heigh_and_width"
@@ -228,13 +213,13 @@
         <ImageButton
             android:id="@+id/imageButtonPhone"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="?attr/actionBarSize"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:background="?android:attr/selectableItemBackground"
             android:backgroundTint="@color/colorPrimary"
-            android:maxHeight="?attr/actionBarSize"
+            android:maxHeight="@dimen/action_bar_height"
             android:minHeight="@dimen/avatar_item_heigh_and_width"
             android:src="@drawable/icons8_phone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -250,5 +235,40 @@
             app:layout_constraintGuide_begin="8dp" />
 
     </android.support.constraint.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+
+        <FrameLayout
+            android:id="@+id/divider"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary" />
+
+
+        <EditText
+            android:id="@+id/editPhoneView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@android:color/transparent"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:gravity="center_vertical|center_horizontal|center"
+            android:hint="@string/enter_number"
+            android:inputType="phone"
+            android:maxLength="18"
+            android:maxLines="2"
+            android:paddingLeft="4dp"
+            android:paddingStart="4dp"
+            android:singleLine="false"
+            android:textSize="@dimen/keypad_text" />
+
+    </FrameLayout>
+
+
 
 </LinearLayout>

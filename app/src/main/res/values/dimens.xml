@@ -25,6 +25,6 @@
 
     //dial keypad
     <dimen name="keypad_number">28sp</dimen>
-    <dimen name="keypad_text">34sp</dimen>
+    <dimen name="keypad_text">30sp</dimen>
 
 </resources>

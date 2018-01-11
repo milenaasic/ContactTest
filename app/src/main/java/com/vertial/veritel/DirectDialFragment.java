@@ -12,11 +12,13 @@ import android.support.v7.preference.PreferenceManager;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -86,11 +88,17 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
        View rootView=inflater.inflate(R.layout.fragment_direct_dial, container, false);
         mEditPhoneView=rootView.findViewById(R.id.editPhoneView);
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mEditPhoneView.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
-        }else{
+            mEditPhoneView.setShowSoftInputOnFocus(false);
 
+        }else{
+            /*InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mEditPhoneView.getWindowToken(), 0);
+            //mEditPhoneView.setFocusable(false)*/
             mEditPhoneView.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+            mEditPhoneView.setInputType(InputType.TYPE_NULL);
         }
 
 
@@ -325,7 +333,24 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
     }
 
     private String normalizeRawPhoneNumber(String rawPhoneNumber) {
-        return "+390118019200";
+
+        char[] rawNumberArray=rawPhoneNumber.toCharArray();
+        StringBuilder normalizedNumber=new StringBuilder();
+
+        if (rawNumberArray[0]=='+'){
+            normalizedNumber.append(rawNumberArray[0]);
+        }
+
+        for(char item:rawNumberArray){
+
+            if(Character.isDigit(item)){
+                normalizedNumber.append(item);
+
+            }
+        }
+
+
+        return normalizedNumber.toString();
     }
 
 }

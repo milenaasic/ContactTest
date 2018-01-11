@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/action_direct_dial"
-        android:icon="@android:drawable/ic_dialog_dialer"
+        android:icon="@drawable/ic_dialpad_white_24dp"
         android:orderInCategory="50"
         android:title="@string/dial_pad"
         app:showAsAction="always" />
