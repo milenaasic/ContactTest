@@ -21,6 +21,8 @@
 
     // toast strings
     <string name="toast_unable_to_resolve_activity">Unable to make a call.</string>
+    <string name="toast_wrong_number_format">Wrong number format.</string>
+
     <string name="textview">TextView</string>
     <string name="veritel_settings_name">VeriTel Number</string>
     <string name="dial_pad">dial_pad</string>

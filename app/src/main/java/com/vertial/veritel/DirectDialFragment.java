@@ -1,10 +1,14 @@
 package com.vertial.veritel;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
@@ -16,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -28,6 +33,7 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
 
 
     EditText mEditPhoneView;
+    String veriTelTelefon;
 
     private String mParam1;
     private String mParam2;
@@ -35,8 +41,26 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
     private OnFragmentInteractionListener mListener;
 
     public DirectDialFragment() {
-        // Required empty public constructor
+
+
+
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setUpPreferences();
+    }
+
+    private void setUpPreferences() {
+
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        veriTelTelefon=sharedPreferences.getString( getResources().getString(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
+        Log.v(LOG,"value of list key: "+String.valueOf(R.string.list_preference_phones_key));
+        Log.v(LOG,"veritelTelefon u set up pref "+veriTelTelefon);
+
+    }
+
 
     public static DirectDialFragment newInstance(String param1, String param2) {
         DirectDialFragment fragment = new DirectDialFragment();
@@ -177,8 +201,12 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
 
             case R.id.buttonDelete:{
                 Log.v(LOG," broj +");
-                editPhoneNumberDelete();
-                return;
+                if(mEditPhoneView.getText().length()>0 && mEditPhoneView!=null) {
+                    editPhoneNumberDelete();
+                    return;
+                }else {
+                    return;
+                }
             }
 
             case R.id.imageButtonPhone:{
@@ -216,39 +244,88 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
     }
 
     private void editPhoneNumber(String addedText){
+
         Editable currentText=mEditPhoneView.getText();
-        String rawPhone=currentText+addedText;
-        Log.v(LOG," editPhoneNumber "+rawPhone);
-        mEditPhoneView.setText(rawPhone, TextView.BufferType.NORMAL);
 
-        /*String formatedPhoneNumber=null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-           formatedPhoneNumber=PhoneNumberUtils.formatNumber(rawPhone, "US");
-        Log.v(LOG,"formatedPhoneNumber ="+formatedPhoneNumber);
+        if(addedText.equals("+")&& currentText.length()>=1) {
 
-        } else {
+            return;
 
-            formatedPhoneNumber=PhoneNumberUtils.formatNumber(rawPhone);
-
+        }else{
+             currentText.append(addedText);
+            Log.v(LOG, " editPhoneNumber " + currentText);
+            //mEditPhoneView.setText(currentText, TextView.BufferType.NORMAL);
         }
 
-        if(formatedPhoneNumber!=null) {
-            Log.v(LOG,"formatedPhoneNumber nije null ="+formatedPhoneNumber);
-            mEditPhoneView.setText(formatedPhoneNumber, TextView.BufferType.NORMAL);
-        }*/
+
     }
 
     private void editPhoneNumberDelete() {
 
+        Editable currentText=mEditPhoneView.getText();
+        String normalized=currentText.toString();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            normalized=PhoneNumberUtils.normalizeNumber(normalized);
+
+        }else{
+            normalized=normalizeRawPhoneNumber(normalized);
+        }
+
+        if (currentText!=null  && currentText.length()>0) {
+
+            StringBuilder stringBuilder=new StringBuilder(normalized);
+            stringBuilder.deleteCharAt(stringBuilder.length()-1);
+
+            currentText.clear();
+            currentText.append(stringBuilder);
+
+
+
+        }else{
+
+            return;
+        }
     }
 
 
     private void makeCall() {
 
+        String rawPhoneNumber=mEditPhoneView.getText().toString();
 
+        if(rawPhoneNumber!=null&&rawPhoneNumber.length()>10) {
+            Intent intentToCall = new Intent(Intent.ACTION_CALL);
+
+            String normalizedPhoneNumber = null;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                normalizedPhoneNumber = PhoneNumberUtils.normalizeNumber(rawPhoneNumber);
+
+            } else {
+                normalizedPhoneNumber = normalizeRawPhoneNumber(rawPhoneNumber);
+            }
+
+            String telefon = veriTelTelefon + normalizedPhoneNumber + "#";
+            Log.v(LOG, "veritel telefon : " + telefon);
+            intentToCall.setData(Uri.parse(telefon));
+
+            if (intentToCall.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intentToCall);
+            } else {
+                Toast.makeText(getActivity(), getString(R.string.toast_unable_to_resolve_activity), Toast.LENGTH_SHORT).show();
+            }
+        }else{
+
+            return;
+        }
+
+
+    }
+
+    private String normalizeRawPhoneNumber(String rawPhoneNumber) {
+        return "+390118019200";
     }
 
 }

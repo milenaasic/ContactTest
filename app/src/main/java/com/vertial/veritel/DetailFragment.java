@@ -113,7 +113,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private void setUpPreferences() {
 
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
-        veriTelTelefon=sharedPreferences.getString( String.valueOf(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
+        veriTelTelefon=sharedPreferences.getString( getResources().getString(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
         Log.v(DEBUG,"veritelTelefon u set up pref "+veriTelTelefon);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }

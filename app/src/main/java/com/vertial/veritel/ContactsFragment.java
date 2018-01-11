@@ -131,7 +131,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     private void setUpPreferences() {
 
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
-        veriTelTelefon=sharedPreferences.getString(String.valueOf(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
+        veriTelTelefon=sharedPreferences.getString(getResources().getString(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
