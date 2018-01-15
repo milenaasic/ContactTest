@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 
 public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContactRecyclerViewAdapter.ViewHolder> {
-
-    private static final String LOG="MyConttRecViewAdapter";
 
 
     private OnViewHolderClicked mViewHolderClicked;
@@ -42,7 +39,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
 
     MyContactRecyclerViewAdapter(Cursor cursor, OnViewHolderClicked listener) {
-        Log.v(LOG,"adapter konstruktor");
+
         filterCursor=cursor;
         mViewHolderClicked = listener;
 
@@ -52,16 +49,15 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
         if (c!=null) {
                 filterCursor = c;
-                Log.v(LOG,"setovani cursor nije null");
 
                 int n=c.getCount();
-                Log.v(LOG,((Integer)n).toString());
+
         }
 
         filterString=filter;
 
         notifyDataSetChanged();
-        Log.v(LOG,"notifyDataset");
+
         }
 
 
@@ -77,18 +73,17 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rootView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_contact_item, parent, false);
-        Log.v(LOG,"onCreateViewHolder");
+
 
         return new ViewHolder(rootView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.v(LOG, "onBind bilo kako");
+
 
         if (filterCursor != null && filterCursor.getCount() != 0) {
-            Log.v(LOG, "onBind origCursor nije null i count nije 0");
-            Log.v(LOG, ((Integer) position).toString() + "cursor pozicija");
+
 
             if (filterCursor.moveToPosition(position)) {
 
@@ -108,13 +103,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                     newName=newNameOriginal;
                 }
 
-                Log.v(LOG,"ima thumbnail :"+((Boolean)hasThumbnail).toString()+" , posizija "+position);
-                Log.v(LOG,"ima sliku :"+((Boolean)hasPhoto).toString()+" , posizija "+position);
 
-
-                //ucitavanje slike
-                //RequestOptions options = new RequestOptions();
-                //options.circleCrop();
 
                 if(!hasThumbnail){
 
@@ -128,7 +117,6 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
                     holder.mletterInCircle.setText("");
 
-                    Log.v(LOG,photoThumbUri+" photoThumbUri");
 
                 }else {
                     if (!hasPhoto) {
@@ -141,7 +129,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
 
                         holder.mletterInCircle.setText("");
-                        Log.v(LOG,"big photo loaded");
+
 
                     } else {
 
@@ -151,7 +139,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                                     .circleCrop()
                                     .into(holder.mItemImageView);
 
-                        Log.v(LOG,"krug sa slovom");
+
                         char firstLetter=newName.trim().charAt(0);
                         char[] data={firstLetter};
                         holder.mletterInCircle.setText(new String(data).toUpperCase());
@@ -163,8 +151,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
 
 
-                    Log.v(LOG, "string iz cursora" + newName);
-                    Log.v(LOG,"filter string "+filterString);
+
 
                     //oboj slova koja su u upitu
                 if(filterString!=null){
@@ -173,15 +160,15 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                     ForegroundColorSpan colorSpan=new ForegroundColorSpan(Color.parseColor( "#ff4081"));
 
                     int startIndex=(newName.toLowerCase()).indexOf(filterString.toLowerCase());
-                    Log.v(LOG,"start ineks je "+((Integer)startIndex).toString());
+
 
                     if(startIndex!=-1){
 
                         int lastIndex=startIndex+filterString.length();
-                        Log.v(LOG,"last ineks je "+((Integer)lastIndex).toString());
+
 
                         spannableString.setSpan(colorSpan,startIndex,lastIndex,0);
-                        Log.v(LOG,"uradio spannableString");
+
                         holder.mItemTextView.setText(spannableString);
                     }else {
                         holder.mItemTextView.setText(newName);}
@@ -189,7 +176,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 }else holder.mItemTextView.setText(newName);
 
 
-                                  Log.v(LOG, "setovan text ");
+
 
                 if (position==0){
 
@@ -198,16 +185,15 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                     holder.showSeparator.setVisibility(View.GONE);
 
                     holder.firstLetter.setText(new String(data));
-                    Log.v(LOG, "pozicija 0 "+new String(data));
+
 
                 }else{
                     if(filterCursor.moveToPosition(position-1)) {
                         String lastName =filterCursor.getString(CURSOR_DISPLAY_NAME_PRIMARY);
-                        Log.v(LOG, "pozicija nije 0 "+lastName);
+
                         char lastLetter=lastName.charAt(0);
                         char newLetter=newName.charAt(0);
-                        Log.v(LOG, "pozicija nije 0 staro prvo slovo "+((Character)lastLetter).toString());
-                        Log.v(LOG, "pozicija nije 0 novi prvo slovo "+((Character)newLetter).toString());
+
 
                         if (!(lastLetter==newLetter)) {
                             char data[]={newLetter};
@@ -215,7 +201,6 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                             holder.firstLetter.setText(new String(data));
                             holder.showSeparator.setVisibility(View.VISIBLE);
 
-                            Log.v(LOG, "pozicija nije 0 prvo slovo "+new String(data));
                         }else {
 
                             holder.firstLetter.setText("");

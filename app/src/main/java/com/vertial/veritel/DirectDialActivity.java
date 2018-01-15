@@ -6,12 +6,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
 import android.widget.ImageView;
 
 public class DirectDialActivity extends AppCompatActivity implements DirectDialFragment.OnFragmentInteractionListener {
 
-    private static final String LOG = "DirectDialActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +31,12 @@ public class DirectDialActivity extends AppCompatActivity implements DirectDialF
             ImageView mStatusBarBackground=findViewById(R.id.status_bar_background_dial);
             mStatusBarBackground.setMinimumHeight(getStatusBarHeight());
 
-            Log.v(LOG,getStatusBarHeight()+"visina status bara");
+
         }
 
 
         if(savedInstanceState==null){
 
-            Log.v(LOG, "ne postoji direct dial fragment");
             getSupportFragmentManager().beginTransaction().add(R.id.containerDirectDial, new DirectDialFragment()).commit();
 
 
@@ -56,11 +55,10 @@ public class DirectDialActivity extends AppCompatActivity implements DirectDialF
 
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
-            Log.v(LOG, "visina status barapixelsize " + result);
+
 
         }
 
-        Log.v(LOG,"result"+(result));
         return result;
     }
 

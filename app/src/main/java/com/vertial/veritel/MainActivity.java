@@ -15,7 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,7 +31,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class MainActivity extends AppCompatActivity implements ContactsFragment.OnContactsFragmentInteractionListener,
         MenuItem.OnActionExpandListener {
 
-    private static final String LOG="MainActivity";
+
     private static final int REQUEST_READ_CONTACTS=100;
     private static final int REQUEST_PHONE_CALL=110;
 
@@ -65,13 +65,13 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT_WATCH) {
             ImageView mStatusBarBackground=findViewById(R.id.status_bar_background_main);
             mStatusBarBackground.setMinimumHeight(getStatusBarHeight());
-            Log.v(LOG,getStatusBarHeight()+"visina status bara");
+
         }
 
         // ako imas permission ucitaj fragment
         if(savedInstanceState==null){
             if (checkReadContacsPermission()) {
-                Log.v(LOG, "permission read contacts true on create");
+
                 getSupportFragmentManager().beginTransaction().add(R.id.containerContactsList, new ContactsFragment()).commit();
             }
 
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         menuInflater.inflate(R.menu.main_activity_app_bar,menu);
        mActionSettings= menu.findItem(R.id.action_settings);
        mACtionDirectDial=menu.findItem(R.id.action_direct_dial);
-        Log.v(LOG,menu.size()+"broj elemenata u meniju");
+
         return true;
     }
 
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v(LOG, "permission read contacts callback premission");
+
                 getSupportFragmentManager().beginTransaction().add(R.id.containerContactsList, new ContactsFragment()).commit();
 
             } else {
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
 
         if (requestCode == REQUEST_PHONE_CALL) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v(LOG, "permission phone call for dial pad callback premission");
+
                 Intent startSDialUpActivity = new Intent(this, DirectDialActivity.class);
                 startActivity(startSDialUpActivity);
 
@@ -197,11 +197,11 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
 
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
-            Log.v(LOG, "visina status barapixelsize " + result);
+
 
         }
 
-        Log.v(LOG,"result"+(result));
+
         return result;
     }
 
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
 
-       Log.v(LOG,"u action expand");
+
         searchViewActionBar = (SearchView) item.getActionView();
         searchViewActionBar.setIconified(false);
 
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
 
-        Log.v(LOG,"u action colapse");
+
         searchViewActionBar.setQuery("",true);
         searchViewActionBar.clearFocus();
 

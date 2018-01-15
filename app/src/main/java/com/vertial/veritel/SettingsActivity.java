@@ -6,13 +6,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private static final String LOG = "SettingsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,6 @@ public class SettingsActivity extends AppCompatActivity {
             ImageView mStatusBarBackground=findViewById(R.id.status_bar_background_settings);
             mStatusBarBackground.setMinimumHeight(getStatusBarHeight());
 
-            Log.v(LOG,getStatusBarHeight()+"visina status bara");
         }
 
 
@@ -58,11 +56,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
-            Log.v("sett", "visina status barapixelsize " + result);
+
 
         }
 
-        Log.v("sett","result"+(result));
+
         return result;
     }
 

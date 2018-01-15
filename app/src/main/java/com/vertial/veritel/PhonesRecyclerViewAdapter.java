@@ -2,7 +2,7 @@ package com.vertial.veritel;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +12,6 @@ import java.util.ArrayList;
 
 
 class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewAdapter.ViewHolder> {
-
-    public static final String DEBUG="PhonesRecyclerView";
 
 
     private static final int COLUMN_PHONE_NUMBER =1 ;
@@ -25,7 +23,7 @@ class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewA
     private ArrayList<PhoneObject> dataSet=new ArrayList<>(15);
 
 
-    public PhonesRecyclerViewAdapter(Cursor cursor,OnPhoneViewHolderClicked listener) {
+     PhonesRecyclerViewAdapter(Cursor cursor,OnPhoneViewHolderClicked listener) {
 
         phoneListCursor = cursor;
         onPhoneViewHolderClicked = listener;
@@ -38,7 +36,7 @@ class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewA
         if(phoneCursor!=null){
 
             for(int index=0;index<phoneCursor.getCount();index++){
-                Log.v(DEBUG,"index="+index);
+
                 if(phoneCursor.moveToPosition(index)&&!phoneCursor.isNull(1)){
                     // prvi red Cursora
                     if(index==0){
@@ -50,7 +48,7 @@ class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewA
 
                         PhoneObject phoneObject=new PhoneObject(phone,type);
                         dataSet.add(phoneObject);
-                        Log.v(DEBUG,"index=0"+index);
+
                     }else{
 
                         String currentPhone=phoneCursor.getString(1);
@@ -58,7 +56,7 @@ class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewA
 
                         //provera da li je ovo dupliran telefon
                         for (int n=0;n<dataSet.size();n++){
-                            Log.v(DEBUG,"dataset size je "+dataSet.size());
+
                             if(((dataSet.get(n)).phoneNumber).equals(currentPhone)){
                                 hasPhoneNumber=true;
                             }
@@ -91,13 +89,13 @@ class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewA
         phoneListCursor= cursor;
         setDataSet(phoneListCursor);
         notifyDataSetChanged();
-        Log.v(DEBUG,"notifyDataset");
+
 
     }
 
     public interface OnPhoneViewHolderClicked{
 
-        public void onPhoneItemClicked(String phoneNumberToCall);
+        void onPhoneItemClicked(String phoneNumberToCall);
 
     }
 
@@ -109,7 +107,7 @@ class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewA
 
         View rootView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.phone_item, parent, false);
-        Log.v(DEBUG,"onCreateViewHolder");
+
 
         return new PhonesRecyclerViewAdapter.ViewHolder(rootView);
 
@@ -123,33 +121,6 @@ class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewA
         holder.mPhoneTypeTextView.setText(returnType(currentPhoneObject.typeOfNumber));
 
 
-        /*if (phoneListCursor != null && phoneListCursor.getCount() != 0) {
-
-            if (phoneListCursor.moveToPosition(position)) {
-
-                String phoneNumber=phoneListCursor.getString(COLUMN_PHONE_NUMBER);
-                String phoneType=phoneListCursor.getString(COLUMN_PHONE_TYPE);
-                holder.mPhoneNumberTextView.setText(phoneNumber);
-                holder.mPhoneTypeTextView.setText(phoneType);
-
-                [position]=phoneNumber;
-                Log.v(DEBUG,"position " +position);
-                boolean repeatedPhoneNumber=false;
-
-                for (int i =0;i<position;i++){
-
-                        if(phoneNumber.equals(arrayDifferentPhones[i])){
-                            repeatedPhoneNumber=true;
-                        }
-
-                }
-            //ako vec postoji ovaj broj izbaci ViewHolder
-
-                 holder.mView.setVisibility(repeatedPhoneNumber ? View.GONE : View.VISIBLE);
-
-            }
-
-        }*/
 
     }
 
@@ -164,16 +135,16 @@ class PhonesRecyclerViewAdapter extends RecyclerView.Adapter<PhonesRecyclerViewA
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView mPhoneNumberTextView;
-        public TextView mPhoneTypeTextView;
-        public View mView;
+         TextView mPhoneNumberTextView;
+         TextView mPhoneTypeTextView;
+         View mView;
 
 
-        public ViewHolder(View view) {
+         ViewHolder(View view) {
             super(view);
             mView=view;
-            mPhoneNumberTextView = (TextView) view.findViewById(R.id.phoneNumberTextView);
-            mPhoneTypeTextView=(TextView)view.findViewById(R.id.phoneTypeTextView);
+            mPhoneNumberTextView = view.findViewById(R.id.phoneNumberTextView);
+            mPhoneTypeTextView=view.findViewById(R.id.phoneTypeTextView);
             view.setOnClickListener(this);
         }
 

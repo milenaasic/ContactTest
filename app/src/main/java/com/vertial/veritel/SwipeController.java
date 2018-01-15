@@ -11,7 +11,7 @@ import android.graphics.Shader;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
+
 import android.view.View;
 
 
@@ -47,7 +47,7 @@ class SwipeController extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
 
-        Log.v("swipe class","swiped");
+
         int index=viewHolder.getAdapterPosition();
         mViewHolderSwipedListener.onViewHolderSwiped( viewHolder,index);
     }
@@ -65,14 +65,11 @@ class SwipeController extends ItemTouchHelper.SimpleCallback {
         float height=itemView.getHeight();
 
 
-        Log.v("Swipe",height+"height");
-
         int itemListHeightDpi=56;
         int divideLeftPadding=72;
 
         Paint p = new Paint();
-        Log.v("Swipe","tacke"+itemView.getLeft()/density +itemView.getBottom()/density+
-                itemView.getRight()/density + itemView.getBottom()/density);
+
 
         LinearGradient linearShader=new LinearGradient(itemView.getLeft()/density, itemView.getBottom()/density,
                 itemView.getRight()/density , itemView.getBottom()/density,
@@ -89,11 +86,8 @@ class SwipeController extends ItemTouchHelper.SimpleCallback {
         p.setColor(Color.parseColor("#c5cae9"));
         c.drawRoundRect(button, 0, 0, p);
 
-        //c.drawRoundRect(button, 0, 0, p);
-
         float textSize = 60;
 
-        //p.setAntiAlias(true);
         Paint p2=new Paint();
         p2.setTextSize(textSize);
         p2.setColor(Color.parseColor("#ff4081"));
@@ -101,24 +95,15 @@ class SwipeController extends ItemTouchHelper.SimpleCallback {
         float textWidth = p2.measureText(text);
         c.drawText(text, button.centerX()-(textWidth/2), button.centerY()+(textSize/2), p2);
 
-        //ako je itemView koji ima divider, nacrtaj i divider
         if(height/density>itemListHeightDpi){
-            Log.v("swipe","usao i if petlju za veliki item");
-
-            /*Paint p21=new Paint();
-            p21.setColor(Color.parseColor("#bdbdbd"));
-            RectF whiteBackgroundForLine = new RectF(itemView.getLeft()+divideLeftPadding*density, itemView.getTop()+(24-2)*density,
-                    itemView.getRight() , itemView.getTop()+(24+3)*density);*/
 
             Paint p3=new Paint();
             p3.setColor(resources.getColor(R.color.divider));
             RectF line = new RectF(itemView.getLeft()+divideLeftPadding*density, itemView.getTop()+(24)*density,
                  itemView.getRight() , itemView.getTop()+(24+1)*density);
 
-            //c.drawRoundRect(whiteBackgroundForLine,0,0,p21);
             c.drawRoundRect(line, 0, 0, p3);
         }
-
 
         super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         itemView.invalidate();
@@ -127,32 +112,10 @@ class SwipeController extends ItemTouchHelper.SimpleCallback {
 
     private float incScale(float delta) {
         radialScale = (radialScale + delta);
-        //radialScale = (radialScale + delta * radialScaleDirection);
-        /*if (radialScale <= 0.2f) {
-            radialScaleDirection = 1;
-            radialScale = 0.2f;
-        } else if (radialScale >= 1) {
-            radialScaleDirection = -1;
-            radialScale = 1;
-        }*/
 
         return radialScale;
     }
 
-    /*private int getStatusBarHeight() {
-        int result = 0;
-
-        int resourceId = resources.getIdentifier("window_background_color", "dimen", "android");
-
-        if (resourceId > 0) {
-            result = resources.getDimensionPixelSize(resourceId);
-            Log.v("swipe", "visina status barapixelsize " + result);
-
-        }
-
-        Log.v("swipe","result"+(result));
-        return result;
-    }*/
 
 
 }

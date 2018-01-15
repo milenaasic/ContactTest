@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         MyContactRecyclerViewAdapter.OnViewHolderClicked,SearchView.OnQueryTextListener,SearchView.OnCloseListener, SwipeController.ViewHolderSwipedListener,
         SharedPreferences.OnSharedPreferenceChangeListener,View.OnClickListener {
 
-    private static final String DEBUG = "ContactsFragment";
+
 
     private static final int REQUEST_PHONE_CALL = 10;
     String veriTelTelefon;
@@ -110,19 +109,14 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_contact_list, container, false);
 
         mRecyclerView = rootView.findViewById(R.id.myRecylerView);
-        /*mSearchView = rootView.findViewById(R.id.mySearchView);
-        mSearchView.setOnQueryTextListener(this);
-        mSearchView.setSubmitButtonEnabled(false);*/
-
 
         nbOfFilteredItems = rootView.findViewById(R.id.nbFilteredItems);
 
-        Log.v(DEBUG, "onCreateView");
         return rootView;
     }
 
@@ -187,7 +181,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onStop() {
         super.onStop();
-        //searchViewAndroidActionBar.clearFocus();
+
     }
 
     @Override
@@ -210,8 +204,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         Resources res=searchView.getContext().getResources();
 
         mSearchCloseButton=res.getIdentifier("android:id/search_close_btn",null,null);
-        mCloseButtonImage = (ImageView) searchView.findViewById(mSearchCloseButton);
-        mCloseButtonImage.setOnClickListener((View.OnClickListener) this);
+        mCloseButtonImage = searchView.findViewById(mSearchCloseButton);
+        mCloseButtonImage.setOnClickListener(this);
 
     }
 
@@ -234,7 +228,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.v(DEBUG, "onCreateCursor");
+
 
         Uri baseUri;
         if (mCurrentFilter != null) {
@@ -256,12 +250,12 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.v(DEBUG, "onLoadFinished");
+
 
         if (data != null) {
 
             int n = data.getCount();
-            Log.v(DEBUG, ((Integer) n).toString() + "u onLoadFinish");
+
         }
         filterCursor = data;
 
@@ -274,7 +268,6 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void viewHolderClicked(View v, int position) {
 
-        // Toast.makeText(getActivity(),"cliced item nb "+((Integer)position).toString(),Toast.LENGTH_SHORT).show();
 
         if (filterCursor != null && filterCursor.getCount() != 0) {
             if (filterCursor.moveToPosition(position)) {
@@ -299,12 +292,8 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public boolean onQueryTextChange(String newText) {
 
-        // Called when the action bar search text has changed.  Update
-        // the search filter, and restart the loader to do a new query
-        // with this filter.
         String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
-        // Don't do anything if the filter hasn't actually changed.
-        // Prevents restarting the loader when restoring state.
+
         if (mCurrentFilter == null && newFilter == null) {
             return true;
         }
@@ -314,8 +303,6 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
         mCurrentFilter = newFilter;
 
-
-        Log.v(DEBUG, mCurrentFilter + " =mCurrentFilter");
         getLoaderManager().restartLoader(0, null, this);
         return true;
 
@@ -345,7 +332,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
             try{
                 if(c != null && c.moveToFirst() && !c.isNull(1)) {
                     chosenPhoneNumber=c.getString(1);
-                    Log.v(DEBUG, "telefon posel swipe"+chosenPhoneNumber);
+
                 }
             }finally {
                 if (c!=null)c.close();
@@ -362,7 +349,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
                 Intent intentToCall = new Intent(Intent.ACTION_CALL);
                 String telefon = veriTelTelefon + chosenPhoneNumber + "#";
-                Log.v(DEBUG, "on swipe and has permission : " + telefon);
+
                 intentToCall.setData(Uri.parse(telefon));
                 if (intentToCall.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(intentToCall);
@@ -380,11 +367,11 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.v(DEBUG,"veriTelTelefon id on Sharedpreferen pre if ");
+
         if(key.equals(getString(R.string.list_preference_phones_key))){
 
             veriTelTelefon=sharedPreferences.getString(key,getResources().getString(R.string.pref_list_default_value));
-            Log.v(DEBUG,"veriTelTelefon id on Sharedpreferen "+veriTelTelefon);
+
         }
     }
 
@@ -394,7 +381,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
         if(id==mSearchCloseButton){
 
         if(searchViewAndroidActionBar.getQuery()==null){
-            return;
+
         }else{
             searchViewAndroidActionBar.setQuery("",false);
         }
@@ -408,17 +395,14 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     // interfejs prema Activity koja ga sadrzi
     public interface OnContactsFragmentInteractionListener {
-        // šaljem ka Mainacitivy informaciju na osnovu koje će otvoriti Detail fragment
-        // ne znam još šta ću poslati , koji tip podatka
+
         void onContactsFragmentInteraction(int id, String lookup, String name);
     }
 
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        // This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed.  We need to make sure we are no
-        // longer using it.
+
         mAdapter.setFilterCursorAndFilterString(null, null);
     }
 
@@ -452,12 +436,11 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PHONE_CALL) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v(DEBUG, "permission call phone callback premission");
+
 
                 Intent intentToCall = new Intent(Intent.ACTION_CALL);
 
                 String telefon = veriTelTelefon + chosenPhoneNumber + "#";
-                Log.v(DEBUG, "on rq per result and has permission : " + telefon);
 
                 intentToCall.setData(Uri.parse(telefon));
 
@@ -470,7 +453,7 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
             }
         } else {
                 Toast.makeText(getActivity(), "permission not granted", Toast.LENGTH_SHORT).show();
-                Log.v(DEBUG, "nema dozvolu za poziv");
+
             }
 
 

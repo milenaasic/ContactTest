@@ -26,7 +26,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +38,7 @@ import android.widget.Toast;
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener,PhonesRecyclerViewAdapter.OnPhoneViewHolderClicked{
 
-    private static final String DEBUG="detailfragment";
+
 
     private static final int DETAIL_LOADER_ID=15;
     private static final int REQUEST_PHONE_CALL=100;
@@ -112,7 +112,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if(getActivity()!=null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             veriTelTelefon = sharedPreferences.getString(getResources().getString(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
-            Log.v(DEBUG, "veritelTelefon u set up pref " + veriTelTelefon);
+
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
@@ -157,7 +157,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         .error(R.color.colorPrimary)
                         .into(mFullPictureImage);
 
-                Log.v(DEBUG, "full size photo loaded");
+
 
                 if (config.orientation==Configuration.ORIENTATION_PORTRAIT){
                     myToolbar.setBackgroundColor(Color.TRANSPARENT);
@@ -208,7 +208,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 }
 
 
-                 Log.v(DEBUG, "set backround color");
 
 
         }finally {
@@ -262,7 +261,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (data!=null) {
 
             int n=data.getCount();
-            Log.v(DEBUG,((Integer)n).toString()+" broj redova u onLoadFinish");
+
             mPhonesRecyclerViewAdapter.setPhoneCursor(data);
         }
 
@@ -279,11 +278,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     // preferences ucitavanje
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.v(DEBUG,"veritelTelefon u on pref changed pre if "+veriTelTelefon);
+
         if(key.equals(getString(R.string.list_preference_phones_key))){
 
             veriTelTelefon=sharedPreferences.getString(key,getResources().getString(R.string.pref_list_default_value));
-            Log.v(DEBUG,"veritelTelefon u on pref changed posle if "+veriTelTelefon);
+
         }
 
     }
@@ -296,7 +295,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             Intent intentToCall = new Intent(Intent.ACTION_CALL);
 
             String telefon = veriTelTelefon + chosenPhoneNumber + "#";
-            Log.v(DEBUG, "veritel telefon : " + telefon);
+
             intentToCall.setData(Uri.parse(telefon));
 
             if(getActivity().getPackageManager()!=null) {
@@ -349,17 +348,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PHONE_CALL) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v(DEBUG,"permission call phone callback premission");
-                //String normilizedNumber = normilizeNumber("phoneNumber0");
+
                 Intent intentToCall = new Intent(Intent.ACTION_CALL);
                 String telefon = veriTelTelefon + chosenPhoneNumber + "#";
-                Log.v(DEBUG, "veritel telefon : " + telefon);
+
                 intentToCall.setData(Uri.parse(telefon));
                 startActivity(intentToCall);
 
             }
         }else {
-            Log.v(DEBUG,"nema dozvolu za poyiv");
+
         }
     }
 
