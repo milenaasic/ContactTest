@@ -8,15 +8,17 @@
     android:orientation="vertical"
     tools:context="com.vertial.veritel.DirectDialFragment">
 
+    <FrameLayout
+        android:id="@+id/frameForEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
     <EditText
         android:id="@+id/editPhoneView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:backgroundTint="?attr/colorPrimary"
+        android:layout_height="match_parent"
         android:cursorVisible="false"
         android:ems="10"
-        android:focusedByDefault="false"
         android:gravity="center_vertical|center_horizontal|center"
         android:hint="@string/enter_number"
         android:inputType="phone"
@@ -24,6 +26,16 @@
         android:maxLines="2"
         android:singleLine="false"
         android:textSize="@dimen/keypad_text" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary">
+
+        </FrameLayout>
+
+    </FrameLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/containerForDialer"
@@ -35,11 +47,7 @@
             android:id="@+id/button1"
             android:layout_width="117dp"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="8dp"
-            android:autoSizeMaxTextSize="@dimen/keypad_number"
-
-            android:autoSizeTextType="uniform"
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/avatar_item_heigh_and_width"
             android:text="1"
@@ -49,14 +57,14 @@
             app:layout_constraintEnd_toStartOf="@+id/button2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="117dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:autoSizeTextType="none"
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/avatar_item_heigh_and_width"
             android:text="2"
@@ -66,7 +74,8 @@
             app:layout_constraintEnd_toStartOf="@+id/button3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button1"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button3"
@@ -82,13 +91,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button2"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button4"
             android:layout_width="117dp"
             android:layout_height="wrap_content"
-
             android:background="?android:attr/selectableItemBackground"
             android:minHeight="@dimen/avatar_item_heigh_and_width"
             android:text="4"
@@ -98,7 +107,8 @@
             app:layout_constraintEnd_toStartOf="@+id/button5"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button1" />
+            app:layout_constraintTop_toBottomOf="@+id/button1"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button5"
@@ -113,7 +123,8 @@
             app:layout_constraintEnd_toStartOf="@+id/button6"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button4"
-            app:layout_constraintTop_toBottomOf="@+id/button2" />
+            app:layout_constraintTop_toBottomOf="@+id/button2"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button6"
@@ -128,7 +139,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button5"
-            app:layout_constraintTop_toBottomOf="@+id/button3" />
+            app:layout_constraintTop_toBottomOf="@+id/button3"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button7"
@@ -143,7 +155,8 @@
             app:layout_constraintEnd_toStartOf="@+id/button8"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button4" />
+            app:layout_constraintTop_toBottomOf="@+id/button4"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button8"
@@ -158,7 +171,8 @@
             app:layout_constraintEnd_toStartOf="@+id/button9"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button7"
-            app:layout_constraintTop_toBottomOf="@+id/button5" />
+            app:layout_constraintTop_toBottomOf="@+id/button5"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button9"
@@ -173,7 +187,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button8"
-            app:layout_constraintTop_toBottomOf="@+id/button6" />
+            app:layout_constraintTop_toBottomOf="@+id/button6"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/buttonPlus"
@@ -189,7 +204,8 @@
             app:layout_constraintEnd_toStartOf="@+id/button0"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button7" />
+            app:layout_constraintTop_toBottomOf="@+id/button7"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/button0"
@@ -205,7 +221,8 @@
             app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/buttonPlus"
-            app:layout_constraintTop_toBottomOf="@+id/button8" />
+            app:layout_constraintTop_toBottomOf="@+id/button8"
+            tools:ignore="HardcodedText" />
 
 
         <ImageButton
@@ -223,7 +240,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button0"
-            app:layout_constraintTop_toBottomOf="@+id/button9" />
+            app:layout_constraintTop_toBottomOf="@+id/button9"
+            android:contentDescription="@null" />
 
         <ImageButton
             android:id="@+id/imageButtonPhone"
@@ -233,14 +251,14 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:background="?android:attr/selectableItemBackground"
-            android:backgroundTint="@color/colorPrimary"
             android:maxHeight="?attr/actionBarSize"
             android:minHeight="@dimen/avatar_item_heigh_and_width"
             android:src="@drawable/icons8_phone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@null" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"

@@ -72,9 +72,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private String [] phoneSelectionArguments={""};
 
 
-    /*TextView phoneNumber0;
-    ConstraintLayout cardView0;
-    private String contactNumber;*/
     private String veriTelTelefon;
 
     ConstraintLayout mMyConstraintLayout;
@@ -112,16 +109,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void setUpPreferences() {
 
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
-        veriTelTelefon=sharedPreferences.getString( getResources().getString(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
-        Log.v(DEBUG,"veritelTelefon u set up pref "+veriTelTelefon);
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        if(getActivity()!=null) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            veriTelTelefon = sharedPreferences.getString(getResources().getString(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
+            Log.v(DEBUG, "veritelTelefon u set up pref " + veriTelTelefon);
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView=inflater.inflate(R.layout.fragment_detail, container, false);
 
 
@@ -132,8 +131,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         ImageView mFullPictureImage=rootView.findViewById(R.id.fullPictureImage);
 
-        ImageView mStatusBarBackground=getActivity().findViewById(R.id.status_bar_background_main);
-        Toolbar myToolbar=getActivity().findViewById(R.id.mySingleToolbar);
+
+
+        Toolbar myToolbar = getActivity().findViewById(R.id.mySingleToolbar);
 
         Configuration config = getResources().getConfiguration();
 
@@ -170,21 +170,31 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     //myToolbar.setBackgroundColor(Color.TRANSPARENT);
                 }
 
-                if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT_WATCH)&&
-                        config.orientation==Configuration.ORIENTATION_PORTRAIT){
-                   View mStatusBarBackround=rootView.findViewById(R.id.status_bar_background_main);
-                   mStatusBarBackground.setBackgroundColor(getResources().getColor(R.color.colorDarkGreyTransparent20));
-                   // myToolbar.setBackgroundColor(Color.TRANSPARENT);
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT_WATCH) {
 
+                    if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+                        View mStatusBarBackground = getActivity().findViewById(R.id.status_bar_background_main);
+                        mStatusBarBackground.setBackgroundColor(getResources().getColor(R.color.colorDarkGreyTransparent20));
+                        // myToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+                    } else {
+
+                        myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                    }
                 }
 
-                    displayName.setText(trimContactName(contactName,maxNameLength));
+
+                displayName.setText(trimContactName(contactName,maxNameLength));
 
 
             } else {
 
                     if(config.orientation==Configuration.ORIENTATION_LANDSCAPE) {
+
                         myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+
                         displayName.setVisibility(View.GONE);
                         //displayNameTop.setBackgroundColor(Color.TRANSPARENT);
                         displayNameTop.setVisibility(View.VISIBLE);
@@ -213,6 +223,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
 
@@ -288,12 +299,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             Log.v(DEBUG, "veritel telefon : " + telefon);
             intentToCall.setData(Uri.parse(telefon));
 
-            if (intentToCall.resolveActivity(getActivity().getPackageManager()) != null) {
-                startActivity(intentToCall);
-            }else{
-                Toast.makeText(getActivity(),getString(R.string.toast_unable_to_resolve_activity),Toast.LENGTH_SHORT).show();
-            }
+            if(getActivity().getPackageManager()!=null) {
 
+                if (intentToCall.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intentToCall);
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.toast_unable_to_resolve_activity), Toast.LENGTH_SHORT).show();
+                }
+            }
 
 
 
@@ -347,7 +360,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             }
         }else {
             Log.v(DEBUG,"nema dozvolu za poyiv");
-        };
+        }
     }
 
 

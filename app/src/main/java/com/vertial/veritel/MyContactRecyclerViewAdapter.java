@@ -1,5 +1,6 @@
 package com.vertial.veritel;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 
@@ -67,7 +69,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
     public interface OnViewHolderClicked{
 
-        public void viewHolderClicked(View v,int position);
+        void viewHolderClicked(View v,int position);
     }
 
 
@@ -111,28 +113,17 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
 
                 //ucitavanje slike
-                RequestOptions options = new RequestOptions();
-                options.circleCrop();
+                //RequestOptions options = new RequestOptions();
+                //options.circleCrop();
 
                 if(!hasThumbnail){
 
-                    // ako je API>=21 ucitaj drawable i iseci krug
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+
                         GlideApp.with((Fragment) mViewHolderClicked)
                                 .load(photoThumbUri)
-                                .error(R.drawable.veritel_bacground_manji_opseg)
+                                .error(R.drawable.checkbox)
                                 .circleCrop()
                                 .into(holder.mItemImageView);
-
-                    }else{
-                        //nemoj da seces krug neka bude kvadrat
-                        GlideApp.with((Fragment) mViewHolderClicked)
-                                .load(photoThumbUri)
-                                .error(R.color.colorBetweenPrimaryAndPrimaryLight3)
-                                .into(holder.mItemImageView);
-
-                    }
-
 
 
                     holder.mletterInCircle.setText("");
@@ -142,20 +133,11 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 }else {
                     if (!hasPhoto) {
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
-
                             GlideApp.with((Fragment) mViewHolderClicked)
                                     .load(photoUri)
-                                    .error(R.drawable.veritel_bacground_manji_opseg)
+                                    .error(R.drawable.checkbox)
                                     .circleCrop()
                                     .into(holder.mItemImageView);
-
-                        }else {//nemoj da seces krug neka bude kvadrat
-                            GlideApp.with((Fragment) mViewHolderClicked)
-                                    .load(photoUri)
-                                    .error(R.color.colorBetweenPrimaryAndPrimaryLight3)
-                                    .into(holder.mItemImageView);
-                        }
 
 
                         holder.mletterInCircle.setText("");
@@ -163,29 +145,18 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
                     } else {
 
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                             GlideApp.with((Fragment) mViewHolderClicked)
-                                    .load(R.drawable.veritel_background_cyan_only)
+                                    .load(R.drawable.checkbox)
                                     .error(R.color.colorPrimary)
                                     .circleCrop()
                                     .into(holder.mItemImageView);
-
-                        }else {
-
-                            GlideApp.with((Fragment) mViewHolderClicked)
-                                    .load(R.drawable.veritel_bacground_manji_opseg)
-                                    .error(R.color.colorBetweenPrimaryAndPrimaryLight3)
-                                    .into(holder.mItemImageView);
-
-                        }
 
                         Log.v(LOG,"krug sa slovom");
                         char firstLetter=newName.trim().charAt(0);
                         char[] data={firstLetter};
                         holder.mletterInCircle.setText(new String(data).toUpperCase());
 
-                    };
+                    }
                 }
 
 
@@ -247,7 +218,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                             Log.v(LOG, "pozicija nije 0 prvo slovo "+new String(data));
                         }else {
 
-                            holder.firstLetter.setText(new String(""));
+                            holder.firstLetter.setText("");
                             holder.showSeparator.setVisibility(View.GONE);
                         }
                         filterCursor.moveToPosition(position);
@@ -271,23 +242,24 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageView mItemImageView;
-        public TextView mItemTextView;
-        public TextView firstLetter;
-        public FrameLayout showSeparator;
-        public TextView touchLayout;
-        public TextView mletterInCircle;
+       private ImageView mItemImageView;
+        private TextView mItemTextView;
+        private TextView firstLetter;
+        private FrameLayout showSeparator;
+        private TextView touchLayout;
+        private TextView mletterInCircle;
 
 
-        public ViewHolder(View view) {
+        @SuppressLint("CutPasteId")
+         ViewHolder(View view) {
             super(view);
-            mItemImageView = (ImageView) view.findViewById(R.id.itemImageView);
-            mItemTextView = (TextView) view.findViewById(R.id.itemTextView);
-            firstLetter=(TextView) view.findViewById(R.id.firstLetterView);
-            showSeparator=(FrameLayout)view.findViewById(R.id.hideandshow);
-            touchLayout=(TextView)view.findViewById(R.id.itemTextView) ;
+            mItemImageView = view.findViewById(R.id.itemImageView);
+            mItemTextView = view.findViewById(R.id.itemTextView);
+            firstLetter=view.findViewById(R.id.firstLetterView);
+            showSeparator=view.findViewById(R.id.hideandshow);
+            touchLayout=view.findViewById(R.id.itemTextView) ;
             touchLayout.setOnClickListener(this);
-            mletterInCircle=(TextView)view.findViewById(R.id.letterInCircle);
+            mletterInCircle=view.findViewById(R.id.letterInCircle);
         }
 
 

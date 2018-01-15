@@ -23,7 +23,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         PreferenceScreen preferenceScreen=getPreferenceScreen();
         Preference p=preferenceScreen.getPreference(0);
 
-        String value=sharedPreferences.getString(p.getKey(),"");
+        String value=sharedPreferences.getString(p.getKey(),getResources().getString(R.string.pref_list_default_value));
 
         Log.v(DEBUG,"p.getkey "+ p.getKey()+", val "+value);
         setPreferenceSummary(p,value);
@@ -55,7 +55,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if(preference!=null) {
 
             //String value = sharedPreferences.getString(preference.getKey(), "");
-            String value = sharedPreferences.getString(key, "");
+            String value = sharedPreferences.getString(key, getResources().getString(R.string.pref_list_default_value));
             setPreferenceSummary(preference, value);
             Log.v(DEBUG,"shared pref "+ value);
         }

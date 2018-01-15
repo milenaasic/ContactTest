@@ -24,15 +24,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/primaryLightColor"
+            app:srcCompat="@color/colorPrimary"
             tools:foregroundGravity="bottom"
-            tools:scaleType="centerCrop" />
+            tools:scaleType="centerCrop"
+            android:contentDescription="@null" />
 
         <TextView
             android:id="@+id/mytextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:layout_margin="0dp"
             android:gravity="center_vertical"
             android:minHeight="?attr/actionBarSize"

@@ -35,6 +35,7 @@
 
         <activity
             android:name=".DirectDialActivity"
+            android:theme="@style/DialActivityTheme"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>

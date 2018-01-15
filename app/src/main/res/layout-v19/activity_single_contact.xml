@@ -7,44 +7,27 @@
     android:layout_height="match_parent"
     tools:context="com.vertial.veritel.SingleContactActivity">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/single_contact_constrain_layout"
+
+    <FrameLayout
+        android:id="@+id/detailFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/detailFragmentContainer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mySingleToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:theme="@style/ToolbarStyle"
+        app:popupTheme="@style/ToolbarStylePopUp" />
 
-        </FrameLayout>
-
-        <ImageView
-            android:id="@+id/status_bar_background_main"
-            android:layout_width="0dp"
-            android:layout_height="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/single_contact_constrain_layout"
-            app:srcCompat="@color/colorPrimaryDark" />
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/mySingleToolbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/status_bar_background_main" />
-
-
-    </android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/status_bar_background_main"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        app:srcCompat="@android:color/transparent"
+        android:contentDescription="@null" />
 
 
 </android.support.design.widget.CoordinatorLayout>

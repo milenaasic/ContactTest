@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/myLinearLayout"
+    android:id="@+id/myRootLinear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.vertial.veritel.MainActivity">
+    tools:context="com.vertial.veritel.DirectDialActivity">
 
-    <ImageView
-        android:id="@+id/status_bar_background_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        app:srcCompat="@android:color/transparent"
-        android:contentDescription="@null" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/mytoolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:minHeight="?android:attr/actionBarSize"
         android:theme="@style/ToolbarStyle"
         app:popupTheme="@style/ToolbarStylePopUp" />
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/containerContactsList"
+        android:id="@+id/containerDirectDial"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -36,3 +29,6 @@
 
 
 </LinearLayout>
+
+
+

@@ -26,7 +26,7 @@ public class SingleContactActivity extends AppCompatActivity implements SharedPr
         super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_single_contact);
         //ActionBar
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.mySingleToolbar);
+        Toolbar myToolbar = findViewById(R.id.mySingleToolbar);
         myToolbar.setTitle(" ");
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -70,10 +70,12 @@ public class SingleContactActivity extends AppCompatActivity implements SharedPr
 
             ImageView mStatusBarBackground = findViewById(R.id.status_bar_background_main);
              mStatusBarBackground.setMinimumHeight(getStatusBarHeight());
+            myToolbar.setPadding(0,getStatusBarHeight(),0,0);
 
              if(config.orientation==Configuration.ORIENTATION_LANDSCAPE){
 
                  mDetailFragmentContainer.setPadding(0,getStatusBarHeight()+getAppBarHeight(),0,0);
+                 myToolbar.setPadding(0,getStatusBarHeight(),0,0);
              }
         }
 

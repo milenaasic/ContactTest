@@ -8,14 +8,17 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private static final String LOG = "SettingsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.settingToolbar);
+        Toolbar myToolbar = findViewById(R.id.settingToolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar=this.getSupportActionBar();
 
@@ -24,6 +27,12 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
 
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT || Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT_WATCH) {
+            ImageView mStatusBarBackground=findViewById(R.id.status_bar_background_settings);
+            mStatusBarBackground.setMinimumHeight(getStatusBarHeight());
+
+            Log.v(LOG,getStatusBarHeight()+"visina status bara");
+        }
 
 
     }

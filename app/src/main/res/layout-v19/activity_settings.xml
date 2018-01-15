@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/myLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.vertial.veritel.MainActivity">
+    tools:context="com.vertial.veritel.SettingsActivity">
 
     <ImageView
-        android:id="@+id/status_bar_background_main"
+        android:id="@+id/status_bar_background_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         app:srcCompat="@android:color/transparent"
         android:contentDescription="@null" />
 
+
+
     <android.support.v7.widget.Toolbar
-        android:id="@+id/mytoolbar"
+        android:id="@+id/settingToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
         android:theme="@style/ToolbarStyle"
         app:popupTheme="@style/ToolbarStylePopUp" />
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/containerContactsList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-    </android.support.design.widget.CoordinatorLayout>
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.vertial.veritel.SettingsFragment"
+        android:id="@+id/activity_settings"/>
 
 
 </LinearLayout>

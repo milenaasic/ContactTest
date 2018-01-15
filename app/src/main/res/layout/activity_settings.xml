@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+tools:context="com.vertial.veritel.SettingsActivity">
+
+<android.support.v7.widget.Toolbar
+    android:id="@+id/settingToolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    android:theme="@style/ToolbarStyle"
+    app:popupTheme="@style/ToolbarStylePopUp" />
+
+
+<fragment
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.vertial.veritel.SettingsActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/settingToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorBetweenPrimaryAndPrimaryLight2"
-        android:theme="@style/ToolbarStyle" />
-
-
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.vertial.veritel.SettingsFragment"
-        android:id="@+id/activity_settings"/>
+    android:name="com.vertial.veritel.SettingsFragment"
+    android:id="@+id/activity_settings"/>
 
 
 </LinearLayout>

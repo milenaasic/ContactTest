@@ -1,11 +1,13 @@
 package com.vertial.veritel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
@@ -55,12 +57,12 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
     }
 
     private void setUpPreferences() {
-
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
-        veriTelTelefon=sharedPreferences.getString( getResources().getString(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
-        Log.v(LOG,"value of list key: "+String.valueOf(R.string.list_preference_phones_key));
-        Log.v(LOG,"veritelTelefon u set up pref "+veriTelTelefon);
-
+        if(getActivity()!=null) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            veriTelTelefon = sharedPreferences.getString(getResources().getString(R.string.list_preference_phones_key), getResources().getString(R.string.pref_list_default_value));
+            Log.v(LOG, "value of list key: " + String.valueOf(R.string.list_preference_phones_key));
+            Log.v(LOG, "veritelTelefon u set up pref " + veriTelTelefon);
+        }
     }
 
 
@@ -82,7 +84,7 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
        View rootView=inflater.inflate(R.layout.fragment_direct_dial, container, false);
@@ -99,6 +101,7 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
             //mEditPhoneView.setFocusable(false)*/
             mEditPhoneView.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
             mEditPhoneView.setInputType(InputType.TYPE_NULL);
+
         }
 
 
@@ -221,7 +224,6 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
                 Log.v(LOG," pozovi");
                 //proveri jos jednom broj i napravu poziv
                 makeCall();
-                return;
             }
         }
 
@@ -259,8 +261,6 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
 
         if(addedText.equals("+")&& currentText.length()>=1) {
 
-            return;
-
         }else{
              currentText.append(addedText);
             Log.v(LOG, " editPhoneNumber " + currentText);
@@ -282,7 +282,7 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
             normalized=normalizeRawPhoneNumber(normalized);
         }
 
-        if (currentText!=null  && currentText.length()>0) {
+        if ( currentText.length()>0) {
 
             StringBuilder stringBuilder=new StringBuilder(normalized);
             stringBuilder.deleteCharAt(stringBuilder.length()-1);
@@ -292,9 +292,6 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
 
 
 
-        }else{
-
-            return;
         }
     }
 
@@ -303,10 +300,10 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
 
         String rawPhoneNumber=mEditPhoneView.getText().toString();
 
-        if(rawPhoneNumber!=null&&rawPhoneNumber.length()>10) {
+        if(rawPhoneNumber.length()>=10) {
             Intent intentToCall = new Intent(Intent.ACTION_CALL);
 
-            String normalizedPhoneNumber = null;
+            String normalizedPhoneNumber;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 normalizedPhoneNumber = PhoneNumberUtils.normalizeNumber(rawPhoneNumber);
@@ -324,9 +321,7 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
             } else {
                 Toast.makeText(getActivity(), getString(R.string.toast_unable_to_resolve_activity), Toast.LENGTH_SHORT).show();
             }
-        }else{
 
-            return;
         }
 
 

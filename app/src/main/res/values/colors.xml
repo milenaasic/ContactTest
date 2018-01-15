@@ -22,5 +22,5 @@
 
     <color name="divider">#e0e0e0</color>
     <color name="dial_numbers">#7b000000</color>
-
+    <color name="mytransparent">#00000000</color>
 </resources>
