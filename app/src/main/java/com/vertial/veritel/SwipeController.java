@@ -73,7 +73,7 @@ class SwipeController extends ItemTouchHelper.SimpleCallback {
 
         LinearGradient linearShader=new LinearGradient(itemView.getLeft()/density, itemView.getBottom()/density,
                 itemView.getRight()/density , itemView.getBottom()/density,
-                Color.parseColor("#8abea0"),(Color.YELLOW),Shader.TileMode.MIRROR);
+                Color.parseColor("#00bcd4"),Color.parseColor("#00bcd4"),Shader.TileMode.MIRROR);
 
         Matrix matrix=new Matrix();
         float scale = incScale(0.025f);
