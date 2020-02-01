@@ -249,7 +249,7 @@ public class DirectDialFragment extends Fragment implements View.OnClickListener
         Editable currentText=mEditPhoneView.getText();
         String normalized=currentText.toString();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             normalized=PhoneNumberUtils.normalizeNumber(normalized);
 
         }else{
