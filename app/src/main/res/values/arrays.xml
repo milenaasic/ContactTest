@@ -3,12 +3,17 @@
     <string-array name="veritel_phones_key">
         <item>@string/pref_list_entry_key_0 </item>
         <item>@string/pref_list_entry_key_1 </item>
+        <item>@string/pref_list_entry_key_2 </item>
+        <item>@string/pref_list_entry_key_3 </item>
 
     </string-array>
 
     <string-array name="veritel_phones_values">
         <item>@string/pref_list_entry_value_0</item>
         <item>@string/pref_list_entry_value_1</item>
+        <item>@string/pref_list_entry_value_2</item>
+        <item>@string/pref_list_entry_value_3</item>
+
 
     </string-array>
 </resources>
