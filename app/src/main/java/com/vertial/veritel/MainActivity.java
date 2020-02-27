@@ -2,6 +2,7 @@ package com.vertial.veritel;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -24,8 +25,6 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 
 
-
-
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class MainActivity extends AppCompatActivity implements ContactsFragment.OnContactsFragmentInteractionListener,
@@ -34,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
 
     private static final int REQUEST_READ_CONTACTS=100;
     private static final int REQUEST_PHONE_CALL=110;
+
 
     View mCoordinatorLayout;
     ActionBar actionBar;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
     public static final String CONTACT_ID="contactID";
     public static final String CONTACT_LOOKUP_KEY="contactLookup";
     public static final String CONTACT_NAME="contactName";
+
 
 
     @Override
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
             }
 
         }
+
+
 
     }
 
@@ -256,4 +259,6 @@ public class MainActivity extends AppCompatActivity implements ContactsFragment.
         }
         return false;
     }
+
+
 }
